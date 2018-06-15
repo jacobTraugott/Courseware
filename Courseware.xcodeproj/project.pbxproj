@@ -7,21 +7,25 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A140F4277C310B3970F3F9E5 /* Pods_Courseware.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25AA918D47F8A5DE088A68FC /* Pods_Courseware.framework */; };
 		F9D3C55320D35696006EBF08 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D3C55220D35696006EBF08 /* AppDelegate.swift */; };
-		F9D3C55520D35696006EBF08 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D3C55420D35696006EBF08 /* ViewController.swift */; };
 		F9D3C55820D35696006EBF08 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F9D3C55620D35696006EBF08 /* Main.storyboard */; };
 		F9D3C55A20D35698006EBF08 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F9D3C55920D35698006EBF08 /* Assets.xcassets */; };
 		F9D3C55D20D35698006EBF08 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F9D3C55B20D35698006EBF08 /* LaunchScreen.storyboard */; };
+		F9D3C56920D3575F006EBF08 /* CourseListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D3C56820D3575F006EBF08 /* CourseListViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		25AA918D47F8A5DE088A68FC /* Pods_Courseware.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Courseware.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		356449FFB5CA3F8564B93A6D /* Pods-Courseware.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Courseware.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Courseware/Pods-Courseware.debug.xcconfig"; sourceTree = "<group>"; };
+		B54268A8E0382B6A2E30B72D /* Pods-Courseware.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Courseware.release.xcconfig"; path = "Pods/Target Support Files/Pods-Courseware/Pods-Courseware.release.xcconfig"; sourceTree = "<group>"; };
 		F9D3C54F20D35696006EBF08 /* Courseware.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Courseware.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F9D3C55220D35696006EBF08 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		F9D3C55420D35696006EBF08 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		F9D3C55720D35696006EBF08 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		F9D3C55920D35698006EBF08 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F9D3C55C20D35698006EBF08 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F9D3C55E20D35698006EBF08 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F9D3C56820D3575F006EBF08 /* CourseListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseListViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -29,17 +33,37 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A140F4277C310B3970F3F9E5 /* Pods_Courseware.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6B92C77DA5C29CBE74669CA7 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				356449FFB5CA3F8564B93A6D /* Pods-Courseware.debug.xcconfig */,
+				B54268A8E0382B6A2E30B72D /* Pods-Courseware.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		D439C82A204BFAA4D0661974 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				25AA918D47F8A5DE088A68FC /* Pods_Courseware.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		F9D3C54620D35696006EBF08 = {
 			isa = PBXGroup;
 			children = (
 				F9D3C55120D35696006EBF08 /* Courseware */,
 				F9D3C55020D35696006EBF08 /* Products */,
+				6B92C77DA5C29CBE74669CA7 /* Pods */,
+				D439C82A204BFAA4D0661974 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -54,14 +78,46 @@
 		F9D3C55120D35696006EBF08 /* Courseware */ = {
 			isa = PBXGroup;
 			children = (
+				F9D3C56720D35714006EBF08 /* Infrastructure */,
+				F9D3C56620D3570C006EBF08 /* Views */,
+				F9D3C56520D356FD006EBF08 /* Controllers */,
+				F9D3C56420D356F3006EBF08 /* Models */,
 				F9D3C55220D35696006EBF08 /* AppDelegate.swift */,
-				F9D3C55420D35696006EBF08 /* ViewController.swift */,
-				F9D3C55620D35696006EBF08 /* Main.storyboard */,
 				F9D3C55920D35698006EBF08 /* Assets.xcassets */,
-				F9D3C55B20D35698006EBF08 /* LaunchScreen.storyboard */,
 				F9D3C55E20D35698006EBF08 /* Info.plist */,
 			);
 			path = Courseware;
+			sourceTree = "<group>";
+		};
+		F9D3C56420D356F3006EBF08 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		F9D3C56520D356FD006EBF08 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				F9D3C56820D3575F006EBF08 /* CourseListViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		F9D3C56620D3570C006EBF08 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				F9D3C55B20D35698006EBF08 /* LaunchScreen.storyboard */,
+				F9D3C55620D35696006EBF08 /* Main.storyboard */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		F9D3C56720D35714006EBF08 /* Infrastructure */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Infrastructure;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -71,9 +127,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F9D3C56120D35698006EBF08 /* Build configuration list for PBXNativeTarget "Courseware" */;
 			buildPhases = (
+				B6E50D68B95A40F159F4B259 /* [CP] Check Pods Manifest.lock */,
 				F9D3C54B20D35696006EBF08 /* Sources */,
 				F9D3C54C20D35696006EBF08 /* Frameworks */,
 				F9D3C54D20D35696006EBF08 /* Resources */,
+				95F6FE02AFE5F99EAFFC2479 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -130,13 +188,52 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		95F6FE02AFE5F99EAFFC2479 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-Courseware/Pods-Courseware-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Zip/Zip.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Zip.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Courseware/Pods-Courseware-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B6E50D68B95A40F159F4B259 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Courseware-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		F9D3C54B20D35696006EBF08 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F9D3C55520D35696006EBF08 /* ViewController.swift in Sources */,
 				F9D3C55320D35696006EBF08 /* AppDelegate.swift in Sources */,
+				F9D3C56920D3575F006EBF08 /* CourseListViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -278,11 +375,13 @@
 		};
 		F9D3C56220D35698006EBF08 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 356449FFB5CA3F8564B93A6D /* Pods-Courseware.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = W29774Y62S;
 				INFOPLIST_FILE = Courseware/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -290,17 +389,19 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.BlackSmithDevelopers.Courseware;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Debug;
 		};
 		F9D3C56320D35698006EBF08 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B54268A8E0382B6A2E30B72D /* Pods-Courseware.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = W29774Y62S;
 				INFOPLIST_FILE = Courseware/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -308,7 +409,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.BlackSmithDevelopers.Courseware;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Release;
 		};
