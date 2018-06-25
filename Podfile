@@ -4,6 +4,6 @@ target 'Courseware' do
 
   use_frameworks!
   source 'https://github.com/CocoaPods/Specs.git'
-  pod 'Zip', '1.1'
+  pod 'ZIPFoundation', '~> 0.9'
 
 end

@@ -7,7 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A140F4277C310B3970F3F9E5 /* Pods_Courseware.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 25AA918D47F8A5DE088A68FC /* Pods_Courseware.framework */; };
+		06884DFDCA059BFE04CD1424 /* Pods_Courseware.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C36D21F4F5F0E30EA1C222CD /* Pods_Courseware.framework */; };
+		F943372C20D6D94E00FF8454 /* WebViewerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F943372B20D6D94E00FF8454 /* WebViewerViewController.swift */; };
+		F943372E20D6E2E600FF8454 /* Course.swift in Sources */ = {isa = PBXBuildFile; fileRef = F943372D20D6E2E600FF8454 /* Course.swift */; };
+		F943373020D6E58600FF8454 /* CourseCatelog.swift in Sources */ = {isa = PBXBuildFile; fileRef = F943372F20D6E58600FF8454 /* CourseCatelog.swift */; };
+		F99336B020D378C20081B355 /* ZIPFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F99336AF20D378C20081B355 /* ZIPFoundation.framework */; };
+		F9CD1DA820E14482008D5833 /* StaticMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CD1DA720E14482008D5833 /* StaticMethods.swift */; };
 		F9D3C55320D35696006EBF08 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D3C55220D35696006EBF08 /* AppDelegate.swift */; };
 		F9D3C55820D35696006EBF08 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F9D3C55620D35696006EBF08 /* Main.storyboard */; };
 		F9D3C55A20D35698006EBF08 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F9D3C55920D35698006EBF08 /* Assets.xcassets */; };
@@ -15,10 +20,28 @@
 		F9D3C56920D3575F006EBF08 /* CourseListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D3C56820D3575F006EBF08 /* CourseListViewController.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		F99336AE20D378000081B355 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
-		25AA918D47F8A5DE088A68FC /* Pods_Courseware.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Courseware.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		356449FFB5CA3F8564B93A6D /* Pods-Courseware.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Courseware.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Courseware/Pods-Courseware.debug.xcconfig"; sourceTree = "<group>"; };
-		B54268A8E0382B6A2E30B72D /* Pods-Courseware.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Courseware.release.xcconfig"; path = "Pods/Target Support Files/Pods-Courseware/Pods-Courseware.release.xcconfig"; sourceTree = "<group>"; };
+		79D7465BEF70D41405D0D8D9 /* Pods-Courseware.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Courseware.release.xcconfig"; path = "Pods/Target Support Files/Pods-Courseware/Pods-Courseware.release.xcconfig"; sourceTree = "<group>"; };
+		C36D21F4F5F0E30EA1C222CD /* Pods_Courseware.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Courseware.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C643831EAEACCB58CAB581F7 /* Pods-Courseware.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Courseware.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Courseware/Pods-Courseware.debug.xcconfig"; sourceTree = "<group>"; };
+		F943372B20D6D94E00FF8454 /* WebViewerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewerViewController.swift; sourceTree = "<group>"; };
+		F943372D20D6E2E600FF8454 /* Course.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Course.swift; sourceTree = "<group>"; };
+		F943372F20D6E58600FF8454 /* CourseCatelog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CourseCatelog.swift; path = Courseware/Models/CourseCatelog.swift; sourceTree = SOURCE_ROOT; };
+		F99336AF20D378C20081B355 /* ZIPFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ZIPFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F9CD1DA720E14482008D5833 /* StaticMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticMethods.swift; sourceTree = "<group>"; };
 		F9D3C54F20D35696006EBF08 /* Courseware.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Courseware.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F9D3C55220D35696006EBF08 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F9D3C55720D35696006EBF08 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -33,28 +56,30 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A140F4277C310B3970F3F9E5 /* Pods_Courseware.framework in Frameworks */,
+				F99336B020D378C20081B355 /* ZIPFoundation.framework in Frameworks */,
+				06884DFDCA059BFE04CD1424 /* Pods_Courseware.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		6B92C77DA5C29CBE74669CA7 /* Pods */ = {
+		9B5990E13BC86B79A6AC415F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				356449FFB5CA3F8564B93A6D /* Pods-Courseware.debug.xcconfig */,
-				B54268A8E0382B6A2E30B72D /* Pods-Courseware.release.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
-		D439C82A204BFAA4D0661974 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				25AA918D47F8A5DE088A68FC /* Pods_Courseware.framework */,
+				F99336AF20D378C20081B355 /* ZIPFoundation.framework */,
+				C36D21F4F5F0E30EA1C222CD /* Pods_Courseware.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		E44F22F329422A67FCFE0410 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				C643831EAEACCB58CAB581F7 /* Pods-Courseware.debug.xcconfig */,
+				79D7465BEF70D41405D0D8D9 /* Pods-Courseware.release.xcconfig */,
+			);
+			name = Pods;
 			sourceTree = "<group>";
 		};
 		F9D3C54620D35696006EBF08 = {
@@ -62,8 +87,8 @@
 			children = (
 				F9D3C55120D35696006EBF08 /* Courseware */,
 				F9D3C55020D35696006EBF08 /* Products */,
-				6B92C77DA5C29CBE74669CA7 /* Pods */,
-				D439C82A204BFAA4D0661974 /* Frameworks */,
+				E44F22F329422A67FCFE0410 /* Pods */,
+				9B5990E13BC86B79A6AC415F /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -92,6 +117,8 @@
 		F9D3C56420D356F3006EBF08 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				F943372D20D6E2E600FF8454 /* Course.swift */,
+				F943372F20D6E58600FF8454 /* CourseCatelog.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -100,6 +127,7 @@
 			isa = PBXGroup;
 			children = (
 				F9D3C56820D3575F006EBF08 /* CourseListViewController.swift */,
+				F943372B20D6D94E00FF8454 /* WebViewerViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -116,6 +144,7 @@
 		F9D3C56720D35714006EBF08 /* Infrastructure */ = {
 			isa = PBXGroup;
 			children = (
+				F9CD1DA720E14482008D5833 /* StaticMethods.swift */,
 			);
 			path = Infrastructure;
 			sourceTree = "<group>";
@@ -127,11 +156,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F9D3C56120D35698006EBF08 /* Build configuration list for PBXNativeTarget "Courseware" */;
 			buildPhases = (
-				B6E50D68B95A40F159F4B259 /* [CP] Check Pods Manifest.lock */,
+				6535A44FA2CA2FB90CBA60AA /* [CP] Check Pods Manifest.lock */,
 				F9D3C54B20D35696006EBF08 /* Sources */,
 				F9D3C54C20D35696006EBF08 /* Frameworks */,
 				F9D3C54D20D35696006EBF08 /* Resources */,
-				95F6FE02AFE5F99EAFFC2479 /* [CP] Embed Pods Frameworks */,
+				5E661311A3CD7E976ACB1BC5 /* [CP] Embed Pods Frameworks */,
+				F99336AE20D378000081B355 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -189,25 +219,25 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		95F6FE02AFE5F99EAFFC2479 /* [CP] Embed Pods Frameworks */ = {
+		5E661311A3CD7E976ACB1BC5 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Courseware/Pods-Courseware-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Zip/Zip.framework",
+				"${BUILT_PRODUCTS_DIR}/ZIPFoundation/ZIPFoundation.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Zip.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ZIPFoundation.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Courseware/Pods-Courseware-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		B6E50D68B95A40F159F4B259 /* [CP] Check Pods Manifest.lock */ = {
+		6535A44FA2CA2FB90CBA60AA /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -232,7 +262,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F943372E20D6E2E600FF8454 /* Course.swift in Sources */,
 				F9D3C55320D35696006EBF08 /* AppDelegate.swift in Sources */,
+				F9CD1DA820E14482008D5833 /* StaticMethods.swift in Sources */,
+				F943372C20D6D94E00FF8454 /* WebViewerViewController.swift in Sources */,
+				F943373020D6E58600FF8454 /* CourseCatelog.swift in Sources */,
 				F9D3C56920D3575F006EBF08 /* CourseListViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -375,7 +409,7 @@
 		};
 		F9D3C56220D35698006EBF08 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 356449FFB5CA3F8564B93A6D /* Pods-Courseware.debug.xcconfig */;
+			baseConfigurationReference = C643831EAEACCB58CAB581F7 /* Pods-Courseware.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -395,7 +429,7 @@
 		};
 		F9D3C56320D35698006EBF08 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B54268A8E0382B6A2E30B72D /* Pods-Courseware.release.xcconfig */;
+			baseConfigurationReference = 79D7465BEF70D41405D0D8D9 /* Pods-Courseware.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
