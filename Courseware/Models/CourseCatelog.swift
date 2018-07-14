@@ -36,6 +36,7 @@ class CourseCatelog {
             defer {
                 OperationQueue.main.addOperation {
                     self.courseURLs = foundCourseURLs
+                    self.allCourses = courses
                     completion(courses)
                 }
             }
@@ -72,14 +73,14 @@ class CourseCatelog {
         }
     }
     
-    func openCourse(index: Int, courseName: String) -> URL? {
+    func openCourse(index: Int, courseName: String, aircraft: String) -> URL? {
         let dispatchGroup = DispatchGroup()
         var shouldReturnJS: Bool = false
         var shouldReturnZip: Bool = false
         
         dispatchGroup.enter()
         DispatchQueue.global().async {
-            shouldReturnJS = StaticMethods.createJavaScriptFile(lessonName: courseName)
+            shouldReturnJS = StaticMethods.createJavaScriptFile(lessonName: courseName, aircraft: aircraft)
             dispatchGroup.leave()
         }
 
@@ -109,14 +110,29 @@ class CourseCatelog {
     }
     
     private func removeFile(fromPath: String) {
-        if let _ = URL(string: fromPath) {
-            do {
-                try FileManager.default.removeItem(atPath: fromPath)
+        let passedFile = (URL(string: fromPath)!.lastPathComponent).split(separator: ".").first
+        guard let contents = passedFile else {
+            return
+        }
+        let contentString = String(contents)
+        let dirToParse = mediaDirectory.appendingPathComponent(contentString)
+        
+        do {
+            let fileManager = FileManager()
+            print(dirToParse.absoluteString)
+            let files = try fileManager.contentsOfDirectory(at: dirToParse, includingPropertiesForKeys: nil)
+            for file in files {
+                print("removing item: \(file)")
+//                try fileManager.removeItem(atPath: file)
+                try fileManager.removeItem(at: file)
             }
-            catch {
-                print("Error removing file that should exist: \(error)")
-                return
-            }
+            print("removing the directory")
+            try fileManager.removeItem(at: dirToParse)
+            print("got past that shit, now game on!")
+        }
+        catch {
+            print("Error removing file that should exist: \(error)")
+            return
         }
     }
     

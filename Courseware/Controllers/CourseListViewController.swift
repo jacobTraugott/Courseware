@@ -14,6 +14,7 @@ class CourseListViewController: UITableViewController, WKUIDelegate, WKNavigatio
     var courses: [Course] = []
     let courseCatelog = CourseCatelog()
     let courseCellID: String = "CourseCellID"
+    let courseSegue: String = "takeCourseSegue"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,10 +28,20 @@ class CourseListViewController: UITableViewController, WKUIDelegate, WKNavigatio
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: courseCellID, for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: courseCellID, for: indexPath) as! CourseCell
         let course = courses[indexPath.row]
-        cell.textLabel?.text = course.displayName
-        cell.detailTextLabel?.text = course.aircraft
+        //cell.textLabel?.text = course.displayName
+        //cell.detailTextLabel?.text = course.aircraft
+        cell.aircraft.text = course.aircraft
+        cell.courseName.text = course.displayName
+        cell.displayName = course.displayName
+        cell.aircraftText = course.aircraft
+        cell.index = indexPath.row
+        cell.courseCatelog = courseCatelog
+        cell.doneLoadingAction = presentCourse(_:)
+        cell.failedToLoadAction = failedToPresentCourse(_:)
+        cell.activity.stopAnimating()
+        cell.activity.isHidden = true
         return cell
     }
     
@@ -51,6 +62,42 @@ class CourseListViewController: UITableViewController, WKUIDelegate, WKNavigatio
         reloadCourses()
     }
     
+    func presentCourse(_ url: URL) -> Void {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let webVC: WebViewController = storyboard.instantiateViewController(withIdentifier: "webViewForCourse") as! WebViewController
+        webVC.lessonURL = url
+        webVC.modalTransitionStyle = .flipHorizontal
+        self.present(webVC, animated: true, completion: nil)
+    }
+    
+    func failedToPresentCourse(_ msg: String) -> Void {
+        
+    }
+    
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+////    @IBAction func openCourse(_ sender: Any?) {
+//        guard let webVC = segue.destination as? WebViewController else { return }
+////        let webVC = WebViewController()
+//        let indexPath = tableView.indexPathForSelectedRow!
+//
+//        let selectedCourse = courses[indexPath.row].displayName
+//        DispatchQueue.global().async {
+//            let url = self.courseCatelog.openCourse(index: indexPath.row, courseName: selectedCourse)
+//            if let goodUrl = url {
+//                DispatchQueue.main.async {
+//                    webVC.lessonURL = goodUrl
+//                    //self.present(webVC, animated: true, completion: nil)
+//                }
+//            } else {
+//                DispatchQueue.main.async {
+//                    let alert = UIAlertController(title: "Unable to find file", message: "An error occurred while opening courseware.  It's probably a bug and ATIS is a bad coder", preferredStyle: .alert)
+//                    let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+//                    alert.addAction(okAction)
+//                    self.present(alert, animated: true, completion: nil)
+//                }
+//            }
+//        }
+//    }
     
     
 //    let assetsDirectory = "Assets"

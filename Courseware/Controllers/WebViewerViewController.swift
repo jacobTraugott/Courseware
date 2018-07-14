@@ -9,52 +9,62 @@
 import UIKit
 import WebKit
 
-class WebViewerViewController: UIViewController, WKUIDelegate, WKNavigationDelegate {
-    let documentsDirectory = (FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)).first!
-    var lessonName: String!
+class WebViewController: UIViewController, WKUIDelegate, WKNavigationDelegate, UIGestureRecognizerDelegate {
+    let documentsDirectory = StaticMethods.documentsDirectory
+    var lessonURL: URL!
     var webViewer: WKWebView!
-    
-    private func createJavaScriptPage() -> Bool {
-        let js = "$(function(){window.location.href = \"Index.html?lessonName=\(lessonName)\";});"
-        let file = documentsDirectory.appendingPathComponent("lesson.js")
-        do {
-            try js.write(to: file, atomically: false, encoding: .utf8)
-        } catch {
-            print("error writing file: \(error)")
-            return false
-        }
-        return true
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let prefs = WKPreferences()
+        prefs.javaScriptEnabled = true
         
-        if createJavaScriptPage() {
-            let prefs = WKPreferences()
-            prefs.javaScriptEnabled = true
-            let webConfig = WKWebViewConfiguration()
-            webConfig.preferences = prefs
-            webViewer = WKWebView(frame: view.bounds, configuration: webConfig)
-            let htmlPath = documentsDirectory.appendingPathComponent("Home.html").path
-            let htmlURL = URL(fileURLWithPath: htmlPath, isDirectory: false)
-            if FileManager.default.fileExists(atPath: htmlPath) {
-                print("html exists")
-            } else {
-                print("html does not exist")
-                //TODO: Need to return to previous view with error message
-            }
-            
-            webViewer.loadFileURL(htmlURL, allowingReadAccessTo: documentsDirectory)
-            webViewer.navigationDelegate = self
-            webViewer.uiDelegate = self
-            self.view = webViewer
-        } else {
-            //TODO: Need to return to previous view with error message
-        }
+        let scriptSource = "var buttons = document.getElementsByClassName('exitBtn'); var button = buttons[0]; button.onclick = function() { window.webkit.messageHandlers.buttonPressed.postMessage({\"message\" : \"exitCourse\"}); };"
+        let userContentController = WKUserContentController()
+        let userScript = WKUserScript(source: scriptSource,
+                                      injectionTime: .atDocumentEnd,
+                                      forMainFrameOnly: false)
+        userContentController.addUserScript(userScript)
+        // Advertise that we support receiving messages. Post them in JavaScript via:
+        // window.webkit.messageHandlers.buttonPressed.postMessage()
+        userContentController.add(self, name: "buttonPressed")
+        
+        let webConfig = WKWebViewConfiguration()
+        webConfig.preferences = prefs
+        webConfig.userContentController = userContentController
+        webViewer = WKWebView(frame: view.frame, configuration: webConfig)
+        webViewer.contentMode = .scaleToFill
+        webViewer.loadFileURL(lessonURL, allowingReadAccessTo: documentsDirectory)
+        webViewer.navigationDelegate = self
+        webViewer.uiDelegate = self
+        view.addSubview(webViewer)
+        
+        let swipeGesture = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(closeLesson(_:)))
+        swipeGesture.edges = .left
+        swipeGesture.delegate = self
+        view.addGestureRecognizer(swipeGesture)
     }
     
-    
-    @IBAction func closeLesson(_ sender: UIButton) {
-        //TODO: Need to implement means of closing the view and returning to the table
+    @objc func closeLesson(_ sender: UIScreenEdgePanGestureRecognizer) {
+        let dX = sender.translation(in: view).x
+        if sender.state == .ended {
+            let fraction = abs(dX / view.bounds.width)
+            if fraction >= 0.5 {
+                self.dismiss(animated: true, completion: nil)
+            }
+        }
+    }
+}
+
+extension WebViewController: WKScriptMessageHandler {
+    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+        print("recieved message")
+        guard let payload = message.body as? [String: Any],
+            let msg = payload["message"], let msgAction = msg as? String else {
+                return
+        }
+        if msgAction == "exitCourse" {
+            self.dismiss(animated: true, completion: nil)
+        }
     }
 }

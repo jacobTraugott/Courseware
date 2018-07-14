@@ -19,8 +19,8 @@ enum StaticMethods {
         }
     }
     
-    static func createJavaScriptFile(lessonName: String) -> Bool{
-        let js = "$(function(){window.location.href = \"Index.html?lessonName=\(lessonName)\";});"
+    static func createJavaScriptFile(lessonName: String, aircraft: String) -> Bool{
+        let js = "$(function(){window.location.href = \"Index.html?lessonName=\(aircraft)_\(lessonName)_CBT\";});"
         let file = documentsDirectory.appendingPathComponent("lesson.js")
         do {
             try js.write(to: file, atomically: false, encoding: .utf8)
