@@ -152,7 +152,12 @@ class CourseCatelog {
         guard let contents = split.first else {
             return
         }
-        let contentString = String(contents)
+        let contentString: String
+        if useMediaDirectory {
+            contentString = String(contents)
+        } else {
+            contentString = toSplit
+        }
         let dirToParse: URL
         if useMediaDirectory {
             dirToParse = mediaDirectory.appendingPathComponent(contentString)
@@ -175,7 +180,13 @@ class CourseCatelog {
             try fileManager.removeItem(at: dirToParse)
                 print("got past that shit, now game on!")
             } else {
-                print("Nothing to remove, moving on")
+                if !useMediaDirectory {
+                    print("removing single item")
+                    try fileManager.removeItem(at: dirToParse)
+                    print("success, removed")
+                } else {
+                    print("Nothing to remove, moving on")
+                }
             }
             
         }
