@@ -16,6 +16,11 @@ class WebViewController: UIViewController, WKUIDelegate, WKNavigationDelegate, U
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+//        let values = [UIInterfaceOrientation.landscapeLeft, UIInterfaceOrientation.landscapeRight]
+//        let value = UIInterfaceOrientation.landscapeLeft.rawValue
+//        UIDevice.current.setValue(value, forKey: "orientation")
+        
         let prefs = WKPreferences()
         prefs.javaScriptEnabled = true
         
@@ -37,10 +42,13 @@ class WebViewController: UIViewController, WKUIDelegate, WKNavigationDelegate, U
         webViewer.loadFileURL(lessonURL, allowingReadAccessTo: documentsDirectory)
         webViewer.navigationDelegate = self
         webViewer.uiDelegate = self
+        webViewer.scrollView.bounces = false
+        
+        webViewer.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         view.addSubview(webViewer)
         
         let swipeGesture = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(closeLesson(_:)))
-        swipeGesture.edges = .left
+        swipeGesture.edges = .left //may need to address this with the rotation
         swipeGesture.delegate = self
         view.addGestureRecognizer(swipeGesture)
     }
@@ -54,6 +62,16 @@ class WebViewController: UIViewController, WKUIDelegate, WKNavigationDelegate, U
             }
         }
     }
+    
+//    override var shouldAutorotate: Bool {
+//        return true
+//    }
+//
+//    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+//        return .landscapeLeft
+//    }
+    
+    
 }
 
 extension WebViewController: WKScriptMessageHandler {

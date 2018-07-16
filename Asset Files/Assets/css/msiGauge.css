@@ -1,0 +1,142 @@
+﻿/*
+ |===============================================================================|
+ |   Instrument:  MSI Specific CSS                                               |
+ |       Author:  Jason Willis & Michael Lopez                                   |
+ |         Date:  1/2017                                                         |
+ |                                                                               |
+ |  Description:  Instrumentation Demo for MSI                                   |
+ |                                                                               |
+ |===============================================================================|
+*/
+
+/* siach Speed Indicator (MSI) */
+#MSI {
+    background-image: url("../../Content/Instruments/T1AMachSpeedIndicator_462_585/T1_MSI_Base.png");
+    background-repeat: no-repeat;
+    /*background-position:-13px -6px;*/  /*Use if BaseFinal isn't Trimmed*/
+    font-size: 100%;
+    font-family: "Open Sans", sans-serif;
+    color: #aaa;
+    text-align: center;
+    /* https://css-tricks.com/almanac/properties/u/user-select/ */
+    -webkit-user-select: none; /* Chrome all / Safari all */
+    -webkit-user-drag: none;
+    -moz-user-select: none; /* Firefox all */
+    -ms-user-select: none; /* IE 10+ */
+    user-select: none; /* Likely future */
+    /*Two lines below modified by Mike Lopez 1/23/2017*/
+    width: 452px;
+    height: 555px;
+    overflow:hidden;
+}
+
+/* -- TEMP Button OnClick -- */
+#btnTempPress {
+    /*border: red;*/
+    position: fixed;
+    /*top: 0px;
+    left: 0px;*/
+    top: 506px; /*Added by Mike Lopez 1/23/2017*/
+    left: 52px; /*Added by Mike Lopez 1/23/2017*/
+    height: 40px; /*Added by Mike Lopez 1/23/2017*/
+    width: 40px; /*Added by Mike Lopez 1/23/2017*/
+}
+.msiButtonPressedImg {
+  /*  border: solid yellow;*/
+    display:none; /*Added by Mike Lopez 1/23/2017*/
+    position: fixed; /*Added by Mike Lopez 1/23/2017*/
+    top: 473px; /*Added by Mike Lopez 1/23/2017*/
+    left: 20px; /*Added by Mike Lopez 1/23/2017*/
+}
+.msidisplayTASImg {
+    position: fixed; /*Added by Mike Lopez 1/23/2017*/
+    top: 75px; /*Added by Mike Lopez 1/23/2017*/
+    left: 96px; /*Added by Mike Lopez 1/23/2017*/
+
+}
+
+#imgMsiPush{
+    /*border: solid red;*/
+    position: relative;
+    top: -14px;
+    left: -14px;
+}
+
+/* Knob Push Area*/
+#pushMSI {
+    border: 1px solid white;
+    position: relative;
+    top: 100px;
+    left: 98px;
+    width: 40px;
+    height: 40px;
+    z-index: 500;
+}
+
+
+/* Knob Div/Border for Click Rotation Area */
+#knobMSI {
+    /*border: solid yellow;*/
+    float: left;
+    position: fixed;
+    width: 250px;
+    height: 250px;
+    top: 404px;
+    left: 115px;
+    z-index: 20;
+}
+
+/* bug class - if needed */
+.bugVisible {
+    visibility:hidden;
+    
+    /*border:dashed pink;
+    position: absolute;
+    height: 316px;
+    width: 316px;
+    top: 78px;
+    left: 75px;*/
+}
+
+#imgBug {
+    background-image: url("../../Content/Instruments/T1AMachSpeedIndicator_462_585/T1_MSI_Bug.png");
+    background-repeat: no-repeat;
+    transform: rotate(50deg); /*rotate: 51deg for bug to be on 250*/  
+    /*border:dashed pink;*/
+    position: absolute;
+    height: 316px;
+    width: 316px;
+    top: 78px;
+    left: 75px;
+}
+
+/* Static bug displayed lower right when center button pushed */
+#bugKnotSymbol{
+    background-image: url("../../Content/Instruments/T1AMachSpeedIndicator_462_585/T1_MSI_Bug.png");
+    position:absolute;
+    top: 344px;
+    left: 356px;
+}
+
+/* Initial 250 displayed lower right under static bug (#bugKnotSymbol) when center button pushed  */
+.lblBug{
+    color:cyan;
+    font-size:large;
+    font-weight:900;
+    /*border: dashed blue;*/
+    width: 50px;
+    position:absolute;
+    top: 364px;
+    left: 340px;
+}
+
+/* Alternate way to hide deBug div */
+.deBug {  
+    visibility:hidden;
+}
+.msiTempImg{
+    /*border: dashed red;*/
+    position: fixed; /*Added by Mike Lopez 1/23/2017*/
+    top: 360px; /*Added by Mike Lopez 1/23/2017*/
+    left: 95px; /*Added by Mike Lopez 1/23/2017*/
+}

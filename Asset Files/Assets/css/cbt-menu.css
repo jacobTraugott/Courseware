@@ -1,0 +1,86 @@
+/*@import url(http://fonts.googleapis.com/css?family=Lato:300,400,700);*/
+@font-face {
+	font-weight: normal;
+	font-style: normal;
+	font-family: 'codropsicons';
+	src:url('../fonts/codropsicons/codropsicons.eot');
+	src:url('../fonts/codropsicons/codropsicons.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/codropsicons/codropsicons.woff') format('woff'),
+		url('../fonts/codropsicons/codropsicons.ttf') format('truetype'),
+		url('../fonts/codropsicons/codropsicons.svg#codropsicons') format('svg');
+}
+
+nav {
+	/*background: #34495e;*/
+	color: #fff;
+	font-weight: 300;
+	font-family: 'Lato', Calibri, Arial, sans-serif;
+}
+
+a {
+	text-decoration: none;
+	color: #f7f7f7;
+	outline: none;
+}
+
+a:hover, a:focus {
+	color: #fff;
+	outline: none;
+}
+
+.clearfix:before,
+.clearfix:after {
+	display: table;
+	content: " ";
+}
+
+.clearfix:after {
+	clear: both;
+}
+
+@media screen and (max-width: 69em) {
+	.block {
+		float: none;
+		width: 100% !important;
+		padding: 1em;
+	}
+}
+
+@media screen and (max-width: 25em) {
+
+	body {
+		font-size: 80%;
+	}
+
+	.cbt-icon span {
+		display: none;
+	}
+
+}
+.inactive a{
+    color:#333;
+}
+.inactiveParent a{
+    color:#333;
+}
+.inactive a:hover{
+    color:#333;
+}
+.currentIndex a{
+    color:#f7f7f7;
+}
+.currentIndexParent a{
+    /*color:#f7f7f7;*/
+}
+.currentIndex a:hover{
+    color:#fff;
+}
+.active a{
+    color:yellow;
+}
+.activeParent a{
+    color:yellow;
+}
+.active a:hover{
+    color:green;
+}

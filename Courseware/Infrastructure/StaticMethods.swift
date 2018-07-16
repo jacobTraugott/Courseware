@@ -19,8 +19,9 @@ enum StaticMethods {
         }
     }
     
-    static func createJavaScriptFile(lessonName: String, aircraft: String) -> Bool{
-        let js = "$(function(){window.location.href = \"Index.html?lessonName=\(aircraft)_\(lessonName)_CBT\";});"
+    static func createJavaScriptFile(lessonName: String, aircraft: String, isCBT: Bool) -> Bool{
+        let cbt: String = isCBT ? "CBT" : "IBT"
+        let js = "$(function(){window.location.href = \"Index.html?lessonName=\(aircraft)_\(lessonName)_\(cbt)\";});"
         let file = documentsDirectory.appendingPathComponent("lesson.js")
         do {
             try js.write(to: file, atomically: false, encoding: .utf8)
@@ -29,6 +30,18 @@ enum StaticMethods {
             return false
         }
         return true
+    }
+    
+    static func isFileCBTorIBT(url: URL) -> TrainingType {
+        let file = (url.lastPathComponent).lowercased()
+        
+        if file.contains("_cbt_") {
+            return .cbt
+        } else if file.contains("_ibt_") {
+            return .ibt
+        } else {
+            return .none
+        }
     }
     
     static let documentsDirectory = (FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)).first!

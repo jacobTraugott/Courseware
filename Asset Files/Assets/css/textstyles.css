@@ -1,0 +1,75 @@
+/* Filename: textstyles.css */
+/* Course Colors for T6 PPT */
+
+body
+{	 margin: 0px;
+	 background-color: #000066;
+	 color: #FFFFFF;
+}
+p{} /* removes the default to white in flash */
+br {   display: block;   margin: 10px 0;} /* standardizes the breaktags */
+li { padding: 0px;  } /* list items */
+ul { padding: 0px; } /* unsorted items */
+.c { text-align: center;  display:block; padding:0px,0px,0px,0px;} /* align center */
+.r { text-align: right; display:block; padding:0px,0px,0px,0px;} /* align right */
+.l { text-align: left; display:block; padding:0px,0px,0px,0px;} /* align left */
+.tabSpacer { font-size: xx-small; color: #000066; } /* Invisble Blue */
+.bunk { padding: auto; } /* Nothing */
+.tn { font-size: 28px; font-weight: bold; color: #00FFFF; font-family: Arial; } /* Normal Topic Frame text */
+.th { font-size: 28px; font-weight: bold; color: #FFFFFF; font-family: Arial; } /* Current Topic Frame text */
+.a { font-size: 20px; font-family: Arial; } /* Normal Courseware text */
+.ax { font-size: 20px; font-family: Arial; } /* Normal Courseware text */
+.aL { font-size: 26px; font-family: Arial; } /* Large Normal Courseware text */
+.an { color: #FFFFFF; font-size: 20px; font-family: Arial; } /* Normal Courseware text */
+.anL { color: #FFFFFF; font-size: 26px; font-family: Arial; } /* Large Normal Courseware text */
+.ae { color: #FF9900; font-size: 20px; font-family: Arial; } /* Emphasis text */
+.aeL { color: #FF9900; font-size: 26px; font-family: Arial; } /* Large Emphasis text */
+.ad { color: #00FFFF; font-size: 20px; font-family: Arial; } /* Directional text that tells the student what to do */
+.adL { color: #00FFFF; font-size: 26px; font-family: Arial; } /* Large Directional text that tells the student what to do */
+.ag { color: #999999; font-size: 20px; font-family: Arial; } /* Build text or Non-Active text */
+.agL { color: #999999; font-size: 26px; font-family: Arial; } /* Large Build text or Non-Active text */
+.ar { color: #FF0000; font-size: 20px; font-family: Arial; } /* Bold Emphasis text i.e. notes, things the student MUST remember */
+.arL { color: #FF0000; font-size: 26px; font-family: Arial; } /* Large Bold Emphasis text i.e. notes, things the student MUST remember */
+.adef { color: #00FF00; font-size: 20px; font-family: Arial; } /* Glossary Definition Word */
+.adefL { color: #00FF00; font-size: 26px; font-family: Arial; } /* Large Glossary Definition Word */
+.aalt { color: #FFFF00; font-size: 20px; font-family: Arial; } /* Alternate Text Color */
+.aaltL { color: #FFFF00; font-size: 26px; font-family: Arial; } /* Large Alternate Text Color */
+.acl { color: #00FFFF; font-size: 20px; font-family: Arial; } /* Clicked Distractor */
+.acor { color: #00FF00; font-size: 20px; font-family: Arial; } /* Correct Feedback text */
+.awng { color: #FF0000; font-size: 20px; font-family: Arial; } /* Wrong Feedback text */
+.ah0 { color: #00FF00; font-size: 16px; font-weight: bold; font-family: Arial; } /* Highlight text 1 */
+.ah1 { color: #FF9900; font-size: 16px; font-weight: bold; font-family: Arial; } /* Highlight text 2 */
+.ah2 { color: #FF0000; font-size: 16px; font-weight: bold; font-family: Arial; } /* Highlight text 3 */
+.ah3 { color: #FFFFFF; font-size: 16px; font-weight: bold; font-family: Arial; } /* Highlight text 4 */
+.ah4 { color: #00FFFF; font-size: 16px; font-weight: bold; font-family: Arial; } /* Highlight text 5 */
+.ah5 { color: #FFFF00; font-size: 16px; font-weight: bold; font-family: Arial; } /* Highlight text 6 */
+.j { font-size: 20px; font-family: Common Symbols; } /* Common Symbols Courseware text */
+.jL { font-size: 26px; font-family: Common Symbols; } /* Large Common Symbols Courseware text */
+.jn { color: #FFFFFF; font-size: 20px; font-family: Common Symbols; } /* Common Symbols Courseware text */
+.jnL { color: #FFFFFF; font-size: 26px; font-family: Common Symbols; } /* Large Common Symbols Courseware text */
+.je { color: #FF9900; font-size: 20px; font-family: Common Symbols; } /* Common Symbols Emphasis text */
+.jeL { color: #FF9900; font-size: 26px; font-family: Common Symbols; } /* Large Common Symbols Emphasis text */
+.jd { color: #00FFFF; font-size: 20px; font-family: Common Symbols; } /* Common Symbols Directional text that tells the student what to do */
+.jdL { color: #00FFFF; font-size: 26px; font-family: Common Symbols; } /* Large Common Symbols Directional text that tells the student what to do */
+.jg { color: #999999; font-size: 20px; font-family: Common Symbols; } /* Common Symbols Build text or Non-Active text */
+.jgL { color: #999999; font-size: 26px; font-family: Common Symbols; } /* Large Common Symbols Build text or Non-Active text */
+.jr { color: #FF0000; font-size: 20px; font-family: Common Symbols; } /* Common Symbols Bold Emphasis text i.e. notes, things the student MUST remember */
+.jrL { color: #FF0000; font-size: 26px; font-family: Common Symbols; } /* Large Common Symbols Bold Emphasis text i.e. notes, things the student MUST remember */
+.jdef { color: #00FF00; font-size: 20px; font-family: Common Symbols; } /* Common Symbols Glossary Definition Word */
+.jdefL { color: #00FF00; font-size: 26px; font-family: Common Symbols; } /* Large Common Symbols Glossary Definition Word */
+.jalt { color: #FFFF00; font-size: 20px; font-family: Common Symbols; } /* Common Symbols Alternate Text */
+.jaltL { color: #FFFF00; font-size: 26px; font-family: Common Symbols; } /* Large Common Symbols Alternate Text */
+.jcl { color: #00FFFF; font-size: 20px; font-family: Common Symbols; } /* Clicked Distractor */
+.jcor { color: #00FF00; font-size: 20px; font-family: Common Symbols; } /* Correct Feedback text */
+.jwng { color: #FF0000; font-size: 20px; font-family: Common Symbols; } /* Wrong Feedback text */
+.jh0 { color: #00FF00; font-size: 12px; font-weight: bold; font-family: Common Symbols; } /* Common Symbols Highlight text 1 */
+.jh1 { color: #FF9900; font-size: 12px; font-weight: bold; font-family: Common Symbols; } /* Common Symbols Highlight text 2 */
+.jh2 { color: #FF0000; font-size: 12px; font-weight: bold; font-family: Common Symbols; } /* Common Symbols Highlight text 3 */
+.jh3 { color: #FFFFFF; font-size: 12px; font-weight: bold; font-family: Common Symbols; } /* Common Symbols Highlight text 4 */
+.jh4 { color: #00FFFF; font-size: 12px; font-weight: bold; font-family: Common Symbols; } /* Common Symbols Highlight text 5 */
+.jh5 { color: #FFFF00; font-size: 12px; font-weight: bold; font-family: Common Symbols; } /* Common Symbols Highlight text 6 */
+.indent { display:block;  padding-left:21px;} /* Indention span*/
+.bullet { list-style-position:inside;} /* Bullet span*/
+.definition { color: #00FF00; font-size: 20px; font-family: Arial; text-decoration:none; position: relative; display: inline-block; border-bottom: 1px dotted black;}
+.definitionLarge { color: #00FF00; font-size:26px; font-family: Arial; text-decoration:none; position: relative; display: inline-block; border-bottom: 1px dotted black; }
+.sqBullet li{list-style:square;}

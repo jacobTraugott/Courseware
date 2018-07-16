@@ -1,0 +1,179 @@
+﻿<!doctype html>
+<html lang="en" class="no-js">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="UTF-8" />    
+    <meta name="viewport" content="width=device-width, initial-scale=0.97">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="Assets/css/master.css">
+</head>
+
+<body>
+    <input type="hidden" id="mode" name="mode" value="production">
+    <!-- qTip ToolTip -->
+    <div id="cbtStart" style="visibility: hidden;"></div>
+    <div id="cbtBack" style="visibility: hidden;"></div>
+    <div id="cbtMenuNote" style="visibility: hidden;"></div>
+    <!-- ui-dialog -->
+    
+    <div id="baseSelectionDialog" style="display:none;">
+        <fieldset>
+            <legend>Class ID And Base Selection</legend>
+            <div id="classID" class="required">
+                <input type="text" name="txbClassIdOne" id="txbClassIdOne" class="inputText" size="4" maxlength="2" value="" placeholder="99" required>
+                <input type="text" name="txbClassIdTwo" id="txbClassIdTwo" class="inputText" size="4" maxlength="3" value="" placeholder="999" required>
+            </div>
+            <div id="baseSelection">
+                <select name="ddlBaseSelect" id="ddlBaseSelect" class="ui-widget-content ui-corner-all"></select>
+            </div>
+        </fieldset>
+    </div>
+    <div>
+        <div id="container" class="container">
+            <!-- Push Wrapper -->
+            <div class="mp-pusher" id="mp-pusher">
+                <!-- mp-menu, menu gets written into nav element -->
+                <nav id="mp-menu" class="mp-menu"></nav>
+                <!-- /menus -->
+                <div class="scroller">
+                    <!-- this is for emulating position fixed of the nav -->
+                    <div class="scroller-inner">
+                        <!--<div class="content clearfix positionRelative">-->
+                        <div class="content clearfix">
+                            <div id="media" style="z-index: 1;" class="positionAbsolute"></div>
+                            <div id="hotspot" style="z-index: 1000;" class="positionRelative"></div>
+                            <div id="highlights">
+                                <div id="highlightText" style="z-index: 1090; position:absolute; left:0; top:0; pointer-events: none;" width="1020" height="745"></div>
+                                <canvas id="canvas" style="z-index: 990; position:absolute; left:0; top:0; pointer-events: none;" class="canvas" width="1020" height="745"></canvas>
+                            </div>
+                            <div id="wrapper" class="wrapper clearfix">
+                                <div id="titleBar" class="clearfix"></div>
+                                <div id="ExamTimer" class="examTimeInfo"></div>
+                                <div id="text" style="z-index: 200;" class="text-box"></div>
+                                <div id="columns" style="z-index: 200;" class="columnsDiv"></div>
+                            </div>
+                        </div>
+                        <!-- /scroller inner -->
+                    </div>
+                    <!-- /scroller -->
+                </div>
+                <!-- /menu pusher -->
+            </div>
+            <!-- /container -->
+            <div id="remediationContainer" width="984"></div>
+
+        </div>
+
+        <!-- footer -->
+        <div id="footer">
+            <footer class="footer">
+                <nav id="left-nav">
+                    <a href="#" id="trigger" class="listMenuBtn" title="Open Menu">#</a>
+                    <a href="#" id="glossaryBtn" class="glossaryBtn" title="Click For Glossary">#</a>
+                    <a href="#" class="backBtn" title="Previous Frame">#</a>
+                </nav>
+                <nav id="center-nav">
+                    <a href="#" id="versionInfo_link" class="versionBtn">#</a>
+                </nav>
+                <nav id="right-nav">
+                    <a href="#" id="forwardButton" class="forwardBtn" title="Next Frame">#</a>
+                    <a href="#" class="audioBtn" title="Audio Queue">#</a>
+                    <a href="#" class="exitBtn" title="Exit Training">#</a>
+                </nav>
+                <div id="controlGrp">
+                    <div class="msgDisplay msgRight">
+                        <span id="pageCount" class="message"></span>
+                    </div>
+                    <div class="cbtProgress clearfix">
+                        <span id="progressLabel" class="progressLabel">Progress</span>
+                        <span id="pbar"><progress id="progressbar" value="0"></progress></span>
+                        <span id="progress-percent" class="progress-percent">0%</span>
+                    </div>
+                </div>
+                <div id="pageNumGrp">
+                    <div class="msgDisplay">
+                        <span id="frameMessage" class="message">Click to begin</span>
+                    </div>
+                </div>
+            </footer>
+        </div>
+        <!-- /footer -->
+    </div>
+    <div id="externalLink" style="display:none">
+        <div id="externLink" onclick="ExternalLinkCalled();"><img src="Assets/img/extLink.png"></div>
+    </div>
+        <script type="text/javascript" src="Assets/js/app/mediaStartPath.js"></script>
+        <script type="text/javascript" src="Assets/js/vendor/jquery-2.2.4.js"></script>
+        <script type="text/javascript" src="Assets/js/vendor/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="Assets/js/vendor/modernizr.custom.js"></script>
+        <script type="text/javascript" src="Assets/js/app/CBTHandler.js"></script>
+        <script type="text/javascript" src="Assets/js/app/getXML.js"></script>
+        <script type="text/javascript" src="Assets/js/app/ClassificationXML.js"></script>
+        <script type="text/javascript" src="Assets/js/app/modalHandler.js" defer></script>
+        <script type="text/javascript" src="Assets/js/vendor/classie.js" defer></script>
+        <script type="text/javascript" src="Assets/js/vendor/mlpushmenu.js" defer></script>
+        <script type="text/javascript" src="Assets/js/app/triggerEvents.js"></script>
+        <script type="text/javascript" src="Assets/js/vendor/jquery.qtip.min.js"></script>
+        <script type="text/javascript" src="Assets/js/vendor/jquery.jcarousel.min.js"></script>
+        <script type="text/javascript" src="Assets/libs/TIMS_Lesson_API_wrapper.js"></script>
+
+        <script type="text/javascript">
+            $(window).on("load", function ()
+            {
+                if (CheckIfExam() === "exam")
+                {
+                    ExamResizePage();
+                }
+                else//cbt/ibt
+                {
+                    //$.getScript("Assets/js/app/GetXml.js")   
+                    //    .done(function( script, textStatus ) {
+                    //    console.log( textStatus );
+                    //    })
+                    //    .fail(function( jqxhr, settings, exception ) {
+                    //    $( "div.log" ).text( "Triggered ajaxError handler." );
+                    //});
+                    var lessonName = readCookie('cbtCookie');
+                    if (lessonName != null)
+                    {
+                        LoadXML(GetXmlText(lessonName));
+                        eraseCookie('cbtCookie');
+                    }
+                    else
+                    {
+                        LoadXML(GetXmlText(QueryString()));
+                    }
+                    resizePage();
+                }
+                
+            });
+
+            $(window).on("beforeunload", function ()
+            {
+              //  EndCBT();
+            });
+            function readCookie(name) {
+                var nameEQ = name + "=";
+                var ca = document.cookie.split(';');
+                for (var i = 0; i < ca.length; i++) {
+                    var c = ca[i];
+                    while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+                }
+                return null;
+            }
+            function eraseCookie(name) {
+                createCookie(name, "", -1);
+            }
+            function createCookie(name, value, days) {
+                var expires = "";
+                if (days) {
+                    var date = new Date();
+                    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                    expires = "; expires=" + date.toUTCString();
+                }
+                document.cookie = name + "=" + value + expires + "; path=/";
+            }
+        </script>
+</body>
+</html>

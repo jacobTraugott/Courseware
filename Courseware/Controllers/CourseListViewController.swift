@@ -8,7 +8,8 @@
 
 import UIKit
 import WebKit
-import ZIPFoundation
+//import ZIPFoundation
+import ZipArchive
 
 class CourseListViewController: UITableViewController, WKUIDelegate, WKNavigationDelegate {
     var courses: [Course] = []
@@ -30,8 +31,6 @@ class CourseListViewController: UITableViewController, WKUIDelegate, WKNavigatio
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: courseCellID, for: indexPath) as! CourseCell
         let course = courses[indexPath.row]
-        //cell.textLabel?.text = course.displayName
-        //cell.detailTextLabel?.text = course.aircraft
         cell.aircraft.text = course.aircraft
         cell.courseName.text = course.displayName
         cell.displayName = course.displayName
@@ -71,7 +70,7 @@ class CourseListViewController: UITableViewController, WKUIDelegate, WKNavigatio
     }
     
     func failedToPresentCourse(_ msg: String) -> Void {
-        
+        //TODO: Add alert message here for the user to know the action failed
     }
     
 //    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
