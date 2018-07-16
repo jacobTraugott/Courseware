@@ -87,7 +87,12 @@ class CourseCatelog {
             for url in urls {
                 print(url.path)
                 guard url.pathExtension == self.fileExtension else { continue }
-                guard url.lastPathComponent != self.assetsFile else { continue }
+                guard url.lastPathComponent != self.assetsFile else {
+                    DispatchQueue.global().async {
+                        self.removeFile(fromPath: url.absoluteString, useMediaDirectory: false)
+                    }
+                    continue
+                }
                 let course = Course(fileName: url)
                 courses.append(course)
             }
@@ -134,7 +139,7 @@ class CourseCatelog {
         }
     }
     
-    private func removeFile(fromPath: String) {
+    private func removeFile(fromPath: String, useMediaDirectory: Bool = true) {
         let passedFileURL = URL(string: fromPath)
         guard let passedFile = passedFileURL else {
             return
@@ -148,7 +153,12 @@ class CourseCatelog {
             return
         }
         let contentString = String(contents)
-        let dirToParse = mediaDirectory.appendingPathComponent(contentString)
+        let dirToParse: URL
+        if useMediaDirectory {
+            dirToParse = mediaDirectory.appendingPathComponent(contentString)
+        } else {
+            dirToParse = courseScanDirectory.appendingPathComponent(contentString)
+        }
         
         do {
             let fileManager = FileManager()
