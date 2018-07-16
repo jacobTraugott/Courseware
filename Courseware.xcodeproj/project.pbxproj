@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		F921878F20FBE49000F8A2FE /* TrainingType.swift in Sources */ = {isa = PBXBuildFile; fileRef = F921878E20FBE49000F8A2FE /* TrainingType.swift */; };
-		F9250E4620FC11700056A41D /* ZipArchive.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9250E4520FC11700056A41D /* ZipArchive.framework */; };
 		F9250E5F20FC1C280056A41D /* Zip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F9250E5E20FC1C280056A41D /* Zip.framework */; };
 		F943372C20D6D94E00FF8454 /* WebViewerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F943372B20D6D94E00FF8454 /* WebViewerViewController.swift */; };
 		F943372E20D6E2E600FF8454 /* Course.swift in Sources */ = {isa = PBXBuildFile; fileRef = F943372D20D6E2E600FF8454 /* Course.swift */; };
@@ -38,7 +37,6 @@
 
 /* Begin PBXFileReference section */
 		F921878E20FBE49000F8A2FE /* TrainingType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrainingType.swift; sourceTree = "<group>"; };
-		F9250E4520FC11700056A41D /* ZipArchive.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ZipArchive.framework; path = Carthage/Build/iOS/ZipArchive.framework; sourceTree = "<group>"; };
 		F9250E5E20FC1C280056A41D /* Zip.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Zip.framework; path = Carthage/Build/iOS/Zip.framework; sourceTree = "<group>"; };
 		F943372B20D6D94E00FF8454 /* WebViewerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewerViewController.swift; sourceTree = "<group>"; };
 		F943372D20D6E2E600FF8454 /* Course.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Course.swift; sourceTree = "<group>"; };
@@ -60,7 +58,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F9250E4620FC11700056A41D /* ZipArchive.framework in Frameworks */,
 				F9250E5F20FC1C280056A41D /* Zip.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -72,7 +69,6 @@
 			isa = PBXGroup;
 			children = (
 				F9250E5E20FC1C280056A41D /* Zip.framework */,
-				F9250E4520FC11700056A41D /* ZipArchive.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -222,7 +218,6 @@
 			files = (
 			);
 			inputPaths = (
-				"$(SRCROOT)/Carthage/Build/iOS/ZipArchive.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Zip.framework",
 			);
 			outputPaths = (

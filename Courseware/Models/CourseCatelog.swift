@@ -7,14 +7,13 @@
 //
 
 import UIKit
-import ZipArchive
 import Zip
 
 class CourseCatelog {
     var allCourses = [Course]()
     private(set) var hasAssetsFile: Bool = false
-    private let courseScanDirectory: URL = StaticMethods.documentsDirectory //FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-    private let mediaDirectory = (StaticMethods.documentsDirectory).appendingPathComponent("Content")  //(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!).appendingPathComponent("Content")
+    private let courseScanDirectory: URL = StaticMethods.documentsDirectory
+    private let mediaDirectory = (StaticMethods.documentsDirectory).appendingPathComponent("Content")
     private let fileExtension = "zip"
     private let assetsFile = "Assets.zip"
     private let assetsDirectory = "Assets"
@@ -154,6 +153,7 @@ class CourseCatelog {
         do {
             let fileManager = FileManager()
             print(dirToParse.absoluteString)
+            if StaticMethods.doesWebDirectoryExist(contentString) {
             let files = try fileManager.contentsOfDirectory(at: dirToParse, includingPropertiesForKeys: nil)
             if (files.count > 0) {
                 for file in files {
@@ -163,7 +163,11 @@ class CourseCatelog {
             }
             print("removing the directory")
             try fileManager.removeItem(at: dirToParse)
-            print("got past that shit, now game on!")
+                print("got past that shit, now game on!")
+            } else {
+                print("Nothing to remove, moving on")
+            }
+            
         }
         catch {
             print("Error removing file that should exist: \(error)")
