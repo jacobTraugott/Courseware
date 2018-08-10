@@ -13,7 +13,9 @@ class CourseCatelog {
     var allCourses = [Course]()
     private(set) var hasAssetsFile: Bool = false
     private let courseScanDirectory: URL = StaticMethods.documentsDirectory
-    private let mediaDirectory = (StaticMethods.documentsDirectory).appendingPathComponent("Content")
+    private let tempDirectory: URL = StaticMethods.tempDirectory
+    private let mediaDirectory = (StaticMethods.tempDirectory).appendingPathComponent("Content")
+    //TODO: When we update the custom extension, this needs to change
     private let fileExtension = "zip"
     private let assetsFile = "Assets.zip"
     private let assetsDirectory = "Assets"
@@ -48,11 +50,13 @@ class CourseCatelog {
 
             DispatchQueue.global().async {
                 if (!StaticMethods.doesWebDirectoryExist(self.assetsDirectory)) {
+                    
+                    //TODO: When we change the extension, update this line of code
                     if (urls.filter { $0.lastPathComponent == self.assetsFile }).count == 0 {
                         if let bundleURL = Bundle.main.url(forResource: "Assets", withExtension: "zip") {
                             do {
                                 print("Bundle: \(bundleURL)")
-                                let newUrl = self.courseScanDirectory.appendingPathComponent(self.assetsFile)
+                                let newUrl = self.tempDirectory.appendingPathComponent(self.assetsFile)
                                 print("New URL: \(newUrl)")
                                 try FileManager.default.copyItem(at: bundleURL, to: newUrl)
                                 urls.append(newUrl)
@@ -70,7 +74,7 @@ class CourseCatelog {
                     self.hasAssetsFile = true
                 
                     do {
-                        try Zip.unzipFile(assetsPackage, destination: self.courseScanDirectory, overwrite: true, password: nil)
+                        try Zip.unzipFile(assetsPackage, destination: self.tempDirectory, overwrite: true, password: nil)
                     } catch {
                         print("failed to unzip assets")
                         print("error: \(error)")
@@ -114,12 +118,16 @@ class CourseCatelog {
             shouldReturnJS = StaticMethods.createJavaScriptFile(lessonName: courseName, aircraft: aircraft, isCBT: isCBT)
             dispatchGroup.leave()
         }
-
+        //TODO: Need to add support by exchanging the getXML file from bundles as needed
+        // How are we going to differentiate the courses? We may need to artificially preface the file names
+        // with the program that they support.  Using that, we could strip it at unzip since the folder would
+        // remain the same.  To be determined.
         dispatchGroup.enter()
         DispatchQueue.global().async {
             do {
                 let oldCopy = self.mediaDirectory.appendingPathComponent(courseURL.lastPathComponent).absoluteString
                 self.removeFile(fromPath: oldCopy)
+                //TODO: Add the password for the zip file
                 try Zip.unzipFile(courseURL, destination: self.mediaDirectory, overwrite: true, password: nil)
                 shouldReturnZip = true
             } catch {
@@ -132,7 +140,7 @@ class CourseCatelog {
         dispatchGroup.wait()
         
         if shouldReturnZip && shouldReturnJS {
-            let htmlPath = courseScanDirectory.appendingPathComponent("Home.html")
+            let htmlPath = tempDirectory.appendingPathComponent("Home.html")
             return htmlPath
         } else {
             return nil
@@ -162,7 +170,8 @@ class CourseCatelog {
         if useMediaDirectory {
             dirToParse = mediaDirectory.appendingPathComponent(contentString)
         } else {
-            dirToParse = courseScanDirectory.appendingPathComponent(contentString)
+//            dirToParse = courseScanDirectory.appendingPathComponent(contentString)
+            dirToParse = tempDirectory.appendingPathComponent(contentString)
         }
         
         do {
@@ -195,8 +204,4 @@ class CourseCatelog {
             return
         }
     }
-    
-    //TODO: Check to see if file/directory exists
-    
-    
 }

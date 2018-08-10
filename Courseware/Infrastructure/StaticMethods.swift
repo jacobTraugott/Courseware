@@ -9,8 +9,11 @@
 import UIKit
 
 enum StaticMethods {
+    static let documentsDirectory = (FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)).first!
+    static let tempDirectory = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
+    
     static func doesWebDirectoryExist(_ dir: String) -> Bool {
-        let combined = documentsDirectory.appendingPathComponent(dir, isDirectory: true)
+        let combined = tempDirectory.appendingPathComponent(dir, isDirectory: true)
         do {
             _ = try FileManager.default.contentsOfDirectory(at: combined, includingPropertiesForKeys: nil)
             return true
@@ -22,7 +25,7 @@ enum StaticMethods {
     static func createJavaScriptFile(lessonName: String, aircraft: String, isCBT: Bool) -> Bool{
         let cbt: String = isCBT ? "CBT" : "IBT"
         let js = "$(function(){window.location.href = \"Index.html?lessonName=\(aircraft)_\(lessonName)_\(cbt)\";});"
-        let file = documentsDirectory.appendingPathComponent("lesson.js")
+        let file = tempDirectory.appendingPathComponent("lesson.js")
         do {
             try js.write(to: file, atomically: false, encoding: .utf8)
         } catch {
@@ -43,6 +46,4 @@ enum StaticMethods {
             return .none
         }
     }
-    
-    static let documentsDirectory = (FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)).first!
 }

@@ -13,7 +13,6 @@ class CourseListViewController: UITableViewController {
     var courses: [Course] = []
     let courseCatelog = CourseCatelog()
     let courseCellID: String = "CourseCellID"
-    let courseSegue: String = "takeCourseSegue"
     
     override func viewDidLoad() {
         super.viewDidLoad()

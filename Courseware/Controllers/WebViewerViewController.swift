@@ -10,7 +10,7 @@ import UIKit
 import WebKit
 
 class WebViewController: UIViewController, WKUIDelegate, WKNavigationDelegate, UIGestureRecognizerDelegate {
-    let documentsDirectory = StaticMethods.documentsDirectory
+    let documentsDirectory = StaticMethods.tempDirectory
     var lessonURL: URL!
     var webViewer: WKWebView!
     
@@ -48,7 +48,7 @@ class WebViewController: UIViewController, WKUIDelegate, WKNavigationDelegate, U
         view.addSubview(webViewer)
         
         let swipeGesture = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(closeLesson(_:)))
-        swipeGesture.edges = .left //may need to address this with the rotation
+        swipeGesture.edges = .left
         swipeGesture.delegate = self
         view.addGestureRecognizer(swipeGesture)
     }
@@ -62,16 +62,6 @@ class WebViewController: UIViewController, WKUIDelegate, WKNavigationDelegate, U
             }
         }
     }
-    
-//    override var shouldAutorotate: Bool {
-//        return true
-//    }
-//
-//    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-//        return .landscapeLeft
-//    }
-    
-    
 }
 
 extension WebViewController: WKScriptMessageHandler {
