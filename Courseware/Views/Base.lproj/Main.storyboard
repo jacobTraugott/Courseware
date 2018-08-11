@@ -13,7 +13,7 @@
         <!--Available Courses-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="CourseListViewController" customModule="Courseware" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="courseListVC" id="BYZ-38-t0r" customClass="CourseListViewController" customModule="Courseware" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="YDb-2G-roz">
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
