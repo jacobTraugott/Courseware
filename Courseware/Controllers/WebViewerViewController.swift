@@ -13,6 +13,7 @@ class WebViewController: UIViewController, WKUIDelegate, WKNavigationDelegate, U
     let documentsDirectory = StaticMethods.tempDirectory
     var lessonURL: URL!
     var webViewer: WKWebView!
+    var openedFromAppDelegate: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,8 +59,22 @@ class WebViewController: UIViewController, WKUIDelegate, WKNavigationDelegate, U
         if sender.state == .ended {
             let fraction = abs(dX / view.bounds.width)
             if fraction >= 0.5 {
-                self.dismiss(animated: true, completion: nil)
+                closeWindow()
             }
+        }
+    }
+    
+    func closeWindow() {
+        if openedFromAppDelegate {
+            let app = UIApplication.shared.delegate as! AppDelegate
+            let window = app.window
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let courseVC = storyboard.instantiateViewController(withIdentifier: "courseListVC") as! CourseListViewController
+            window?.rootViewController = courseVC
+            window?.makeKeyAndVisible()
+            self.dismiss(animated: true, completion: nil)
+        } else {
+            self.dismiss(animated: true, completion: nil)
         }
     }
 }
@@ -72,7 +87,7 @@ extension WebViewController: WKScriptMessageHandler {
                 return
         }
         if msgAction == "exitCourse" {
-            self.dismiss(animated: true, completion: nil)
+            self.closeWindow()
         }
     }
 }
