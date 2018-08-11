@@ -12,9 +12,13 @@ import Zip
 class CourseCatelog {
     var allCourses = [Course]()
     private(set) var hasAssetsFile: Bool = false
-    private let courseScanDirectory: URL = StaticMethods.documentsDirectory
-    private let tempDirectory: URL = StaticMethods.tempDirectory
-    private let mediaDirectory = (StaticMethods.tempDirectory).appendingPathComponent("Content")
+//    private let courseScanDirectory: URL = StaticMethods.documentsDirectory
+//    private let tempDirectory: URL = StaticMethods.tempDirectory
+//    private let mediaDirectory = (StaticMethods.tempDirectory).appendingPathComponent("Content")
+    private static let courseScanDirectory: URL = StaticMethods.documentsDirectory
+    private static let tempDirectory: URL = StaticMethods.tempDirectory
+    private static let mediaDirectory = (StaticMethods.tempDirectory).appendingPathComponent("Content")
+    
     //TODO: When we update the custom extension, this needs to change
     private let fileExtension = "zip"
     private let assetsFile = "Assets.zip"
@@ -25,6 +29,20 @@ class CourseCatelog {
         queue.maxConcurrentOperationCount = 1
         return queue
     }()
+    
+    private static let phraseA = "I am the very model of a modern major general"
+    private static let phraseB = "I've information vegetable, animal, and mineral"
+    private static let phraseC = "I know the kings of England, and I quote the fights historical"
+    private static let phraseD = "From Marathon to Waterloo, in order categorical"
+    private static let phraseE = "I'm very well acquainted, too, with matters mathematical"
+    private static let phraseF = "I understand equations, both the simple and quadratical"
+    private static let phraseG = "About binomial theorem I'm teeming with a lot o' news"
+    private static let phraseH = "With many cheerful facts about the square of the hypotenuse"
+    private static var phrases: [String] {
+        get {
+            return [phraseA, phraseB, phraseC, phraseD, phraseE, phraseF, phraseG, phraseH]
+        }
+    }
     
     @discardableResult func createItem(fileName: URL) -> Course {
         let newItem = Course(fileName: fileName)
@@ -44,7 +62,7 @@ class CourseCatelog {
                 }
             }
             
-            guard var urls: [URL] = try? FileManager.default.contentsOfDirectory(at: self.courseScanDirectory, includingPropertiesForKeys: [], options: []) else {
+            guard var urls: [URL] = try? FileManager.default.contentsOfDirectory(at: CourseCatelog.courseScanDirectory, includingPropertiesForKeys: [], options: []) else {
                 return
             }
 
@@ -56,7 +74,7 @@ class CourseCatelog {
                         if let bundleURL = Bundle.main.url(forResource: "Assets", withExtension: "zip") {
                             do {
                                 print("Bundle: \(bundleURL)")
-                                let newUrl = self.tempDirectory.appendingPathComponent(self.assetsFile)
+                                let newUrl = CourseCatelog.tempDirectory.appendingPathComponent(self.assetsFile)
                                 print("New URL: \(newUrl)")
                                 try FileManager.default.copyItem(at: bundleURL, to: newUrl)
                                 urls.append(newUrl)
@@ -74,7 +92,7 @@ class CourseCatelog {
                     self.hasAssetsFile = true
                 
                     do {
-                        try Zip.unzipFile(assetsPackage, destination: self.tempDirectory, overwrite: true, password: nil)
+                        try Zip.unzipFile(assetsPackage, destination: CourseCatelog.tempDirectory, overwrite: true, password: nil)
                     } catch {
                         print("failed to unzip assets")
                         print("error: \(error)")
@@ -93,7 +111,7 @@ class CourseCatelog {
                 guard url.pathExtension == self.fileExtension else { continue }
                 guard url.lastPathComponent != self.assetsFile else {
                     DispatchQueue.global().async {
-                        self.removeFile(fromPath: url.absoluteString, useMediaDirectory: false)
+                        CourseCatelog.removeFile(fromPath: url.absoluteString, useMediaDirectory: false)
                     }
                     continue
                 }
@@ -125,10 +143,10 @@ class CourseCatelog {
         dispatchGroup.enter()
         DispatchQueue.global().async {
             do {
-                let oldCopy = self.mediaDirectory.appendingPathComponent(courseURL.lastPathComponent).absoluteString
-                self.removeFile(fromPath: oldCopy)
-                //TODO: Add the password for the zip file
-                try Zip.unzipFile(courseURL, destination: self.mediaDirectory, overwrite: true, password: nil)
+                let oldCopy = CourseCatelog.mediaDirectory.appendingPathComponent(courseURL.lastPathComponent).absoluteString
+                CourseCatelog.removeFile(fromPath: oldCopy)
+                
+                try Zip.unzipFile(courseURL, destination: CourseCatelog.mediaDirectory, overwrite: true, password: CourseCatelog.phrases[5])
                 shouldReturnZip = true
             } catch {
                 print("Error during unzip: \(error)")
@@ -140,14 +158,60 @@ class CourseCatelog {
         dispatchGroup.wait()
         
         if shouldReturnZip && shouldReturnJS {
-            let htmlPath = tempDirectory.appendingPathComponent("Home.html")
+            let htmlPath = CourseCatelog.tempDirectory.appendingPathComponent("Home.html")
             return htmlPath
         } else {
             return nil
         }
     }
     
-    private func removeFile(fromPath: String, useMediaDirectory: Bool = true) {
+    static func openCourse(fromURL url: URL) -> URL? {
+        let course = Course(fileName: url)
+        let dispatchGroup = DispatchGroup()
+        var shouldReturnJS: Bool = false
+        var shouldReturnZip: Bool = false
+        let trainingType = StaticMethods.isFileCBTorIBT(url: url)
+        guard trainingType != .none else {
+            return nil
+        }
+        let isCBT = trainingType == .cbt
+        dispatchGroup.enter()
+        DispatchQueue.global().async {
+            shouldReturnJS = StaticMethods.createJavaScriptFile(lessonName: course.displayName, aircraft: course.aircraft, isCBT: isCBT)
+            dispatchGroup.leave()
+        }
+        
+        dispatchGroup.enter()
+        DispatchQueue.global().async {
+            do {
+                let oldCopy = CourseCatelog.mediaDirectory.appendingPathComponent(url.lastPathComponent).absoluteString
+                CourseCatelog.removeFile(fromPath: oldCopy)
+                
+                try Zip.unzipFile(url, destination: CourseCatelog.mediaDirectory, overwrite: true, password: CourseCatelog.phrases[5])
+                shouldReturnZip = true
+            } catch {
+                print("Error during unzip: \(error)")
+                shouldReturnZip = false
+            }
+            dispatchGroup.leave()
+        }
+        
+        dispatchGroup.wait()
+        
+        if shouldReturnZip && shouldReturnJS {
+            do {
+                try FileManager.default.copyItem(at: url, to: CourseCatelog.courseScanDirectory.appendingPathComponent(url.lastPathComponent))
+            } catch {
+                print(error)
+            }
+            let htmlPath = CourseCatelog.tempDirectory.appendingPathComponent("Home.html")
+            return htmlPath
+        } else {
+            return nil
+        }
+    }
+    
+    private static func removeFile(fromPath: String, useMediaDirectory: Bool = true) {
         let passedFileURL = URL(string: fromPath)
         guard let passedFile = passedFileURL else {
             return
@@ -168,10 +232,10 @@ class CourseCatelog {
         }
         let dirToParse: URL
         if useMediaDirectory {
-            dirToParse = mediaDirectory.appendingPathComponent(contentString)
+            dirToParse = CourseCatelog.mediaDirectory.appendingPathComponent(contentString)
         } else {
 //            dirToParse = courseScanDirectory.appendingPathComponent(contentString)
-            dirToParse = tempDirectory.appendingPathComponent(contentString)
+            dirToParse = CourseCatelog.tempDirectory.appendingPathComponent(contentString)
         }
         
         do {
