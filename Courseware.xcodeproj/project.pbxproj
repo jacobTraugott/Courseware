@@ -13,6 +13,7 @@
 		F943372E20D6E2E600FF8454 /* Course.swift in Sources */ = {isa = PBXBuildFile; fileRef = F943372D20D6E2E600FF8454 /* Course.swift */; };
 		F943373020D6E58600FF8454 /* CourseCatelog.swift in Sources */ = {isa = PBXBuildFile; fileRef = F943372F20D6E58600FF8454 /* CourseCatelog.swift */; };
 		F9617E5620E1E7CA00650F40 /* CourseCellController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9617E5520E1E7CA00650F40 /* CourseCellController.swift */; };
+		F9CB33D9211E937D000A1FF2 /* Icon-167.png in Resources */ = {isa = PBXBuildFile; fileRef = F9CB33D8211E937D000A1FF2 /* Icon-167.png */; };
 		F9CD1DA820E14482008D5833 /* StaticMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CD1DA720E14482008D5833 /* StaticMethods.swift */; };
 		F9D3C55320D35696006EBF08 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D3C55220D35696006EBF08 /* AppDelegate.swift */; };
 		F9D3C55820D35696006EBF08 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F9D3C55620D35696006EBF08 /* Main.storyboard */; };
@@ -42,6 +43,7 @@
 		F943372D20D6E2E600FF8454 /* Course.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Course.swift; sourceTree = "<group>"; };
 		F943372F20D6E58600FF8454 /* CourseCatelog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CourseCatelog.swift; path = Courseware/Models/CourseCatelog.swift; sourceTree = SOURCE_ROOT; };
 		F9617E5520E1E7CA00650F40 /* CourseCellController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseCellController.swift; sourceTree = "<group>"; };
+		F9CB33D8211E937D000A1FF2 /* Icon-167.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-167.png"; sourceTree = "<group>"; };
 		F9CD1DA720E14482008D5833 /* StaticMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticMethods.swift; sourceTree = "<group>"; };
 		F9D3C54F20D35696006EBF08 /* Courseware.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Courseware.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F9D3C55220D35696006EBF08 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -76,6 +78,7 @@
 		F9D3C54620D35696006EBF08 = {
 			isa = PBXGroup;
 			children = (
+				F9CB33D8211E937D000A1FF2 /* Icon-167.png */,
 				F9F8EE4B20FC508000895B10 /* Assets.zip */,
 				F9D3C55120D35696006EBF08 /* Courseware */,
 				F9D3C55020D35696006EBF08 /* Products */,
@@ -205,6 +208,7 @@
 				F9D3C55D20D35698006EBF08 /* LaunchScreen.storyboard in Resources */,
 				F9D3C55A20D35698006EBF08 /* Assets.xcassets in Resources */,
 				F9F8EE4C20FC508000895B10 /* Assets.zip in Resources */,
+				F9CB33D9211E937D000A1FF2 /* Icon-167.png in Resources */,
 				F9D3C55820D35696006EBF08 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
