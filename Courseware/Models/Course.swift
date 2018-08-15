@@ -18,19 +18,28 @@ struct Course: Comparable, Equatable {
     
     init(fileName: URL) {
         self.fileName = fileName.lastPathComponent
-        let rpaString = "RPA_RIQ_"
-        if self.fileName.contains(rpaString) {
-            let splitName = fileName.lastPathComponent.replacingOccurrences(of: rpaString, with: "")
-            let comps = splitName.split(separator: "_")
-            self.program = Program.fromString(comps[0].description)
-            self.aircraft = "RPA_RIQ"
-            self.displayName = comps.count > 2 ? comps[1].description : ""
-        } else {
+        if fileName.lastPathComponent.split(separator: "_").count == 4 {
+            //this should be an old version file
+            //we'll keep this in for now to support the Vance tablets
             let components = self.fileName.split(separator: "_")
-            self.program = Program.fromString(components[0].description)
-            self.aircraft = components.count > 2 ?  components[1].description : ""
-            self.displayName = components.count > 3 ?  components[2].description : ""
-            
+            self.aircraft = components.count > 1 ?  components[0].description : ""
+            self.displayName = components.count > 2 ?  components[1].description : ""
+            self.program = .T6_UPT
+        } else {
+            let rpaString = "RPA_RIQ_"
+            if self.fileName.contains(rpaString) {
+                let splitName = fileName.lastPathComponent.replacingOccurrences(of: rpaString, with: "")
+                let comps = splitName.split(separator: "_")
+                self.program = Program.fromString(comps[0].description)
+                self.aircraft = "RPA_RIQ"
+                self.displayName = comps.count > 2 ? comps[1].description : ""
+            } else {
+                let components = self.fileName.split(separator: "_")
+                self.program = Program.fromString(components[0].description)
+                self.aircraft = components.count > 2 ?  components[1].description : ""
+                self.displayName = components.count > 3 ?  components[2].description : ""
+                
+            }
         }
         self.url = fileName
     }

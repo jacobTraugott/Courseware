@@ -13,8 +13,7 @@ class CourseCatelog {
     
     var allCourses = [Course]()
     private(set) var hasAssetsFile: Bool = false
-    //the baseline assets file supports T6 out of the box
-    private(set) static var currentProgram: Program = .T6_UPT
+    private(set) static var currentProgram: Program = .undefined
     private static let courseScanDirectory: URL = StaticMethods.documentsDirectory
     private static let tempDirectory: URL = StaticMethods.tempDirectory
     private static let mediaDirectory = (StaticMethods.tempDirectory).appendingPathComponent("Content")
