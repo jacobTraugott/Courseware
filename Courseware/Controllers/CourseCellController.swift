@@ -12,8 +12,10 @@ class CourseCell: UITableViewCell {
     @IBOutlet var activity: UIActivityIndicatorView!
     @IBOutlet var courseName: UILabel!
     @IBOutlet var aircraft: UILabel!
+    @IBOutlet var programLabel: UILabel!
     @IBOutlet var takeCourseButton: UIButton!
     
+    var program: Program!
     var aircraftText: String!
     var displayName: String!
     var index: Int!

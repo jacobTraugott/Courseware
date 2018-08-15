@@ -58,7 +58,7 @@ class WebViewController: UIViewController, WKUIDelegate, WKNavigationDelegate, U
         let dX = sender.translation(in: view).x
         if sender.state == .ended {
             let fraction = abs(dX / view.bounds.width)
-            if fraction >= 0.5 {
+            if fraction >= 0.35 {
                 closeWindow()
             }
         }

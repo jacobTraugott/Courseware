@@ -36,14 +36,20 @@
                                         <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="s4m-Tn-Sc9">
                                             <rect key="frame" x="707" y="15" width="20" height="20"/>
                                         </activityIndicatorView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Program" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dTU-w4-HEr">
+                                            <rect key="frame" x="10" y="14.5" width="65.5" height="20.5"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Aircraft" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TM8-j6-aRV">
-                                            <rect key="frame" x="355.5" y="14" width="57" height="21"/>
+                                            <rect key="frame" x="355" y="14.5" width="56.5" height="20.5"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Course" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JEZ-i5-yUv">
-                                            <rect key="frame" x="20" y="14.5" width="55" height="21"/>
+                                            <rect key="frame" x="580" y="14.5" width="55" height="20.5"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
@@ -52,18 +58,21 @@
                                     <constraints>
                                         <constraint firstItem="TgI-9c-9Pw" firstAttribute="centerY" secondItem="1ck-D3-drq" secondAttribute="centerY" id="0Gc-GU-OAR"/>
                                         <constraint firstAttribute="trailing" secondItem="TgI-9c-9Pw" secondAttribute="trailing" constant="8" id="5LZ-kF-doe"/>
+                                        <constraint firstItem="TM8-j6-aRV" firstAttribute="centerX" secondItem="1ck-D3-drq" secondAttribute="centerX" id="G9D-KI-tEq"/>
                                         <constraint firstItem="s4m-Tn-Sc9" firstAttribute="centerX" secondItem="TgI-9c-9Pw" secondAttribute="centerX" id="Ln1-R9-rdR"/>
-                                        <constraint firstItem="TM8-j6-aRV" firstAttribute="centerY" secondItem="1ck-D3-drq" secondAttribute="centerY" id="O9n-PH-2CR"/>
-                                        <constraint firstItem="TM8-j6-aRV" firstAttribute="centerX" secondItem="1ck-D3-drq" secondAttribute="centerX" id="OA7-RD-YGB"/>
+                                        <constraint firstItem="JEZ-i5-yUv" firstAttribute="centerY" secondItem="1ck-D3-drq" secondAttribute="centerY" id="TD6-yQ-KeH"/>
+                                        <constraint firstItem="TgI-9c-9Pw" firstAttribute="leading" secondItem="JEZ-i5-yUv" secondAttribute="trailing" constant="40" id="W5B-NX-9Jw"/>
                                         <constraint firstItem="s4m-Tn-Sc9" firstAttribute="centerY" secondItem="1ck-D3-drq" secondAttribute="centerY" id="fhs-QD-77D"/>
-                                        <constraint firstItem="JEZ-i5-yUv" firstAttribute="centerY" secondItem="1ck-D3-drq" secondAttribute="centerY" id="fjB-P1-iDZ"/>
-                                        <constraint firstItem="JEZ-i5-yUv" firstAttribute="leading" secondItem="1ck-D3-drq" secondAttribute="leading" constant="20" id="wDb-3I-4HW"/>
+                                        <constraint firstItem="TM8-j6-aRV" firstAttribute="centerY" secondItem="1ck-D3-drq" secondAttribute="centerY" id="oEV-3X-g7e"/>
+                                        <constraint firstItem="dTU-w4-HEr" firstAttribute="leading" secondItem="1ck-D3-drq" secondAttribute="leading" constant="10" id="oEb-ru-cTN"/>
+                                        <constraint firstItem="dTU-w4-HEr" firstAttribute="centerY" secondItem="1ck-D3-drq" secondAttribute="centerY" id="wzU-gR-7D1"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="activity" destination="s4m-Tn-Sc9" id="wvX-mc-A9g"/>
                                     <outlet property="aircraft" destination="TM8-j6-aRV" id="tGh-xK-JTl"/>
                                     <outlet property="courseName" destination="JEZ-i5-yUv" id="aWF-kz-KjG"/>
+                                    <outlet property="programLabel" destination="dTU-w4-HEr" id="pJM-Yj-Fnt"/>
                                     <outlet property="takeCourseButton" destination="TgI-9c-9Pw" id="b4A-j7-ykn"/>
                                 </connections>
                             </tableViewCell>

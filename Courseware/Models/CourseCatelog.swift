@@ -10,17 +10,18 @@ import UIKit
 import Zip
 
 class CourseCatelog {
+    
     var allCourses = [Course]()
     private(set) var hasAssetsFile: Bool = false
-//    private let courseScanDirectory: URL = StaticMethods.documentsDirectory
-//    private let tempDirectory: URL = StaticMethods.tempDirectory
-//    private let mediaDirectory = (StaticMethods.tempDirectory).appendingPathComponent("Content")
+    //the baseline assets file supports T6 out of the box
+    private(set) static var currentProgram: Program = .T6_UPT
     private static let courseScanDirectory: URL = StaticMethods.documentsDirectory
     private static let tempDirectory: URL = StaticMethods.tempDirectory
     private static let mediaDirectory = (StaticMethods.tempDirectory).appendingPathComponent("Content")
+    private static let xmlDirectory = (StaticMethods.tempDirectory).appendingPathComponent("Assets/js/app")
+    private static let customExt = "acware"
     
-    //TODO: When we update the custom extension, this needs to change
-    private let fileExtension = "zip"
+    private static let fileExtensions = ["zip", "acware"]
     private let assetsFile = "Assets.zip"
     private let assetsDirectory = "Assets"
     private var courseURLs: [String:URL] = [:]
@@ -69,7 +70,6 @@ class CourseCatelog {
             DispatchQueue.global().async {
                 if (!StaticMethods.doesWebDirectoryExist(self.assetsDirectory)) {
                     
-                    //TODO: When we change the extension, update this line of code
                     if (urls.filter { $0.lastPathComponent == self.assetsFile }).count == 0 {
                         if let bundleURL = Bundle.main.url(forResource: "Assets", withExtension: "zip") {
                             do {
@@ -108,7 +108,15 @@ class CourseCatelog {
             //Generate a new array of courses from the zip files on disk
             for url in urls {
                 print(url.path)
-                guard url.pathExtension == self.fileExtension else { continue }
+                var goodExtension = false
+                for ext in CourseCatelog.fileExtensions {
+                    if url.pathExtension == ext {
+                        goodExtension = true
+                        continue
+                    }
+                }
+                guard goodExtension else { continue }
+//                guard url.pathExtension == self.fileExtension else { continue }
                 guard url.lastPathComponent != self.assetsFile else {
                     DispatchQueue.global().async {
                         CourseCatelog.removeFile(fromPath: url.absoluteString, useMediaDirectory: false)
@@ -118,6 +126,11 @@ class CourseCatelog {
                 let course = Course(fileName: url)
                 courses.append(course)
             }
+            
+            courses.sort(by: { (a, b) -> Bool in
+                //return a.displayName < b.displayName
+                return a < b
+            })
         }
     }
     
@@ -126,20 +139,25 @@ class CourseCatelog {
         var shouldReturnJS: Bool = false
         var shouldReturnZip: Bool = false
         let courseURL = self.allCourses[index].url
+        let courseProgram = self.allCourses[index].program
         let trainingType = StaticMethods.isFileCBTorIBT(url: courseURL)
         guard trainingType != .none else {
             return nil
         }
         let isCBT = trainingType == .cbt
+        Zip.addCustomFileExtension(CourseCatelog.customExt)
         dispatchGroup.enter()
         DispatchQueue.global().async {
             shouldReturnJS = StaticMethods.createJavaScriptFile(lessonName: courseName, aircraft: aircraft, isCBT: isCBT)
             dispatchGroup.leave()
         }
-        //TODO: Need to add support by exchanging the getXML file from bundles as needed
-        // How are we going to differentiate the courses? We may need to artificially preface the file names
-        // with the program that they support.  Using that, we could strip it at unzip since the folder would
-        // remain the same.  To be determined.
+        
+        dispatchGroup.enter()
+        DispatchQueue.global().async {
+            CourseCatelog.moveXML(program: courseProgram)
+            dispatchGroup.leave()
+        }
+        
         dispatchGroup.enter()
         DispatchQueue.global().async {
             do {
@@ -175,9 +193,16 @@ class CourseCatelog {
             return nil
         }
         let isCBT = trainingType == .cbt
+        Zip.addCustomFileExtension(CourseCatelog.customExt)
         dispatchGroup.enter()
         DispatchQueue.global().async {
             shouldReturnJS = StaticMethods.createJavaScriptFile(lessonName: course.displayName, aircraft: course.aircraft, isCBT: isCBT)
+            dispatchGroup.leave()
+        }
+        
+        dispatchGroup.enter()
+        DispatchQueue.global().async {
+            moveXML(program: course.program)
             dispatchGroup.leave()
         }
         
@@ -198,6 +223,10 @@ class CourseCatelog {
         
         dispatchGroup.wait()
         
+        if currentProgram == .undefined {
+            return nil
+        }
+        
         if shouldReturnZip && shouldReturnJS {
             do {
                 try FileManager.default.copyItem(at: url, to: CourseCatelog.courseScanDirectory.appendingPathComponent(url.lastPathComponent))
@@ -208,6 +237,41 @@ class CourseCatelog {
             return htmlPath
         } else {
             return nil
+        }
+    }
+    
+    private static func moveXML(program: Program) {
+        guard program != .undefined else {
+            print("undefined")
+            return
+        }
+        
+        if CourseCatelog.currentProgram == program {
+            print("same program")
+            return
+        }
+        
+        if let newBundle = Bundle.main.url(forResource: program.getBundleName, withExtension: "js") {
+            do {
+                // Have to rename the file or this won't work
+                CourseCatelog.removeXMLFile()
+                try FileManager.default.copyItem(at: newBundle, to: CourseCatelog.xmlDirectory.appendingPathComponent("getXML.js"))
+                CourseCatelog.currentProgram = program
+            } catch {
+                print("Error copying bundle: \(error)")
+            }
+        } else {
+            print("Bundle not set, we done fucked up here")
+            return
+        }
+    }
+    
+    private static func removeXMLFile() {
+        do {
+            let fm = FileManager()
+            try fm.removeItem(at: CourseCatelog.xmlDirectory.appendingPathComponent("getXML.js"))
+        } catch {
+            print("what the fuck?? this should have fucking worked! fuck you!")
         }
     }
     

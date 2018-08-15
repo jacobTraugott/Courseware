@@ -20,6 +20,18 @@
 				<string>com.pkware.zip-archive</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeIconFiles</key>
+			<array>
+				<string>Icon-167.png</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>Courseware File (acware)</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.blacksmithdevelopers.acware</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
@@ -65,5 +77,30 @@
 	</array>
 	<key>UISupportsDocumentBrowser</key>
 	<false/>
+	<key>UTImportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.archive</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Courseware Course Package</string>
+			<key>UTTypeIconFiles</key>
+			<array>
+				<string>Icon-167.png</string>
+			</array>
+			<key>UTTypeIdentifier</key>
+			<string>com.blacksmithdevelopers.acware</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>ACWARE</string>
+					<string>acware</string>
+				</array>
+			</dict>
+		</dict>
+	</array>
 </dict>
 </plist>

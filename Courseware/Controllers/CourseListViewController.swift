@@ -33,6 +33,8 @@ class CourseListViewController: UITableViewController {
         cell.displayName = course.displayName
         cell.aircraftText = course.aircraft
         cell.index = indexPath.row
+        cell.program = course.program
+        cell.programLabel.text = course.program.description
         cell.courseCatelog = courseCatelog
         cell.doneLoadingAction = presentCourse(_:)
         cell.failedToLoadAction = failedToPresentCourse(_:)

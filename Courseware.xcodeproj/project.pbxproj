@@ -13,6 +13,13 @@
 		F943372E20D6E2E600FF8454 /* Course.swift in Sources */ = {isa = PBXBuildFile; fileRef = F943372D20D6E2E600FF8454 /* Course.swift */; };
 		F943373020D6E58600FF8454 /* CourseCatelog.swift in Sources */ = {isa = PBXBuildFile; fileRef = F943372F20D6E58600FF8454 /* CourseCatelog.swift */; };
 		F9617E5620E1E7CA00650F40 /* CourseCellController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9617E5520E1E7CA00650F40 /* CourseCellController.swift */; };
+		F988931F21237711002D9C46 /* (T38-PIT)getXML.js in Resources */ = {isa = PBXBuildFile; fileRef = F988931921237710002D9C46 /* (T38-PIT)getXML.js */; };
+		F988932021237711002D9C46 /* (RPA)getXML.js in Resources */ = {isa = PBXBuildFile; fileRef = F988931A21237710002D9C46 /* (RPA)getXML.js */; };
+		F988932121237711002D9C46 /* (IFF)getXML.js in Resources */ = {isa = PBXBuildFile; fileRef = F988931B21237710002D9C46 /* (IFF)getXML.js */; };
+		F988932221237711002D9C46 /* (T6)getXML.js in Resources */ = {isa = PBXBuildFile; fileRef = F988931C21237711002D9C46 /* (T6)getXML.js */; };
+		F988932321237711002D9C46 /* (T1)getXML.js in Resources */ = {isa = PBXBuildFile; fileRef = F988931D21237711002D9C46 /* (T1)getXML.js */; };
+		F988932421237711002D9C46 /* (T38-UPT)getXML.js in Resources */ = {isa = PBXBuildFile; fileRef = F988931E21237711002D9C46 /* (T38-UPT)getXML.js */; };
+		F988932621237A9E002D9C46 /* Programs.swift in Sources */ = {isa = PBXBuildFile; fileRef = F988932521237A9E002D9C46 /* Programs.swift */; };
 		F9CB33D9211E937D000A1FF2 /* Icon-167.png in Resources */ = {isa = PBXBuildFile; fileRef = F9CB33D8211E937D000A1FF2 /* Icon-167.png */; };
 		F9CD1DA820E14482008D5833 /* StaticMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CD1DA720E14482008D5833 /* StaticMethods.swift */; };
 		F9D3C55320D35696006EBF08 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D3C55220D35696006EBF08 /* AppDelegate.swift */; };
@@ -43,6 +50,13 @@
 		F943372D20D6E2E600FF8454 /* Course.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Course.swift; sourceTree = "<group>"; };
 		F943372F20D6E58600FF8454 /* CourseCatelog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CourseCatelog.swift; path = Courseware/Models/CourseCatelog.swift; sourceTree = SOURCE_ROOT; };
 		F9617E5520E1E7CA00650F40 /* CourseCellController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseCellController.swift; sourceTree = "<group>"; };
+		F988931921237710002D9C46 /* (T38-PIT)getXML.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "(T38-PIT)getXML.js"; sourceTree = "<group>"; };
+		F988931A21237710002D9C46 /* (RPA)getXML.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "(RPA)getXML.js"; sourceTree = "<group>"; };
+		F988931B21237710002D9C46 /* (IFF)getXML.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "(IFF)getXML.js"; sourceTree = "<group>"; };
+		F988931C21237711002D9C46 /* (T6)getXML.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "(T6)getXML.js"; sourceTree = "<group>"; };
+		F988931D21237711002D9C46 /* (T1)getXML.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "(T1)getXML.js"; sourceTree = "<group>"; };
+		F988931E21237711002D9C46 /* (T38-UPT)getXML.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "(T38-UPT)getXML.js"; sourceTree = "<group>"; };
+		F988932521237A9E002D9C46 /* Programs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Programs.swift; sourceTree = "<group>"; };
 		F9CB33D8211E937D000A1FF2 /* Icon-167.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-167.png"; sourceTree = "<group>"; };
 		F9CD1DA720E14482008D5833 /* StaticMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticMethods.swift; sourceTree = "<group>"; };
 		F9D3C54F20D35696006EBF08 /* Courseware.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Courseware.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -52,7 +66,7 @@
 		F9D3C55C20D35698006EBF08 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F9D3C55E20D35698006EBF08 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F9D3C56820D3575F006EBF08 /* CourseListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CourseListViewController.swift; sourceTree = "<group>"; };
-		F9F8EE4B20FC508000895B10 /* Assets.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; name = Assets.zip; path = "Asset Files/Assets.zip"; sourceTree = "<group>"; };
+		F9F8EE4B20FC508000895B10 /* Assets.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = Assets.zip; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,11 +89,25 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		F9CB33DA211F3621000A1FF2 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				F988931B21237710002D9C46 /* (IFF)getXML.js */,
+				F988931A21237710002D9C46 /* (RPA)getXML.js */,
+				F988931D21237711002D9C46 /* (T1)getXML.js */,
+				F988931C21237711002D9C46 /* (T6)getXML.js */,
+				F988931921237710002D9C46 /* (T38-PIT)getXML.js */,
+				F988931E21237711002D9C46 /* (T38-UPT)getXML.js */,
+				F9CB33D8211E937D000A1FF2 /* Icon-167.png */,
+				F9F8EE4B20FC508000895B10 /* Assets.zip */,
+			);
+			path = Assets;
+			sourceTree = "<group>";
+		};
 		F9D3C54620D35696006EBF08 = {
 			isa = PBXGroup;
 			children = (
-				F9CB33D8211E937D000A1FF2 /* Icon-167.png */,
-				F9F8EE4B20FC508000895B10 /* Assets.zip */,
+				F9CB33DA211F3621000A1FF2 /* Assets */,
 				F9D3C55120D35696006EBF08 /* Courseware */,
 				F9D3C55020D35696006EBF08 /* Products */,
 				9B5990E13BC86B79A6AC415F /* Frameworks */,
@@ -113,6 +141,7 @@
 			children = (
 				F943372D20D6E2E600FF8454 /* Course.swift */,
 				F943372F20D6E58600FF8454 /* CourseCatelog.swift */,
+				F988932521237A9E002D9C46 /* Programs.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -205,9 +234,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F988932121237711002D9C46 /* (IFF)getXML.js in Resources */,
+				F988932421237711002D9C46 /* (T38-UPT)getXML.js in Resources */,
+				F988932221237711002D9C46 /* (T6)getXML.js in Resources */,
 				F9D3C55D20D35698006EBF08 /* LaunchScreen.storyboard in Resources */,
+				F988932321237711002D9C46 /* (T1)getXML.js in Resources */,
 				F9D3C55A20D35698006EBF08 /* Assets.xcassets in Resources */,
+				F988931F21237711002D9C46 /* (T38-PIT)getXML.js in Resources */,
 				F9F8EE4C20FC508000895B10 /* Assets.zip in Resources */,
+				F988932021237711002D9C46 /* (RPA)getXML.js in Resources */,
 				F9CB33D9211E937D000A1FF2 /* Icon-167.png in Resources */,
 				F9D3C55820D35696006EBF08 /* Main.storyboard in Resources */,
 			);
@@ -239,6 +274,7 @@
 			files = (
 				F943372E20D6E2E600FF8454 /* Course.swift in Sources */,
 				F9D3C55320D35696006EBF08 /* AppDelegate.swift in Sources */,
+				F988932621237A9E002D9C46 /* Programs.swift in Sources */,
 				F9617E5620E1E7CA00650F40 /* CourseCellController.swift in Sources */,
 				F921878F20FBE49000F8A2FE /* TrainingType.swift in Sources */,
 				F9CD1DA820E14482008D5833 /* StaticMethods.swift in Sources */,
