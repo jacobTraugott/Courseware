@@ -16,6 +16,8 @@ enum Program: Int, CustomStringConvertible {
     case T6_UPT = 4
     case T6_RIQ = 5
     case undefined = 6
+    case T6_PIT = 7
+    case T6_CSO = 8
     
     var description: String {
         switch self {
@@ -33,6 +35,10 @@ enum Program: Int, CustomStringConvertible {
             return "T6-UPT"
         case .undefined:
             return "Unsupported"
+        case .T6_CSO:
+            return "T6-CSO"
+        case .T6_PIT:
+            return "T6-PIT"
         }
     }
     
@@ -52,6 +58,10 @@ enum Program: Int, CustomStringConvertible {
             return "(T6)getXML"
         case .undefined:
             return "Unsupported"
+        case .T6_PIT:
+            return "(T6P)getXML"
+        case .T6_CSO:
+            return "(T6C)getXML"
         }
     }
     
@@ -68,6 +78,12 @@ enum Program: Int, CustomStringConvertible {
             }
             if (value.contains("riq")) {
                 return .T6_RIQ
+            }
+            if (value.contains("pit")) {
+                return .T6_PIT
+            }
+            if (value.contains("cso")) {
+                return .T6_CSO
             }
         }
         

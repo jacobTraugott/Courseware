@@ -199,6 +199,7 @@ class CourseCatelog {
             dispatchGroup.leave()
         }
         
+        //TODO: - This will have to be done only if the XML file is not present in the bundle
         dispatchGroup.enter()
         DispatchQueue.global().async {
             moveXML(program: course.program)
@@ -212,6 +213,7 @@ class CourseCatelog {
                 CourseCatelog.removeFile(fromPath: oldCopy)
                 
                 try Zip.unzipFile(url, destination: CourseCatelog.mediaDirectory, overwrite: true, password: CourseCatelog.phrases[5])
+                //TODO: - Need to check the unzip area for the getXML bundle
                 shouldReturnZip = true
             } catch {
                 print("Error during unzip: \(error)")
@@ -250,6 +252,7 @@ class CourseCatelog {
             return
         }
         
+        // TODO: - Check this for compliance with new courseware distribution setup
         if let newBundle = Bundle.main.url(forResource: program.getBundleName, withExtension: "js") {
             do {
                 // Have to rename the file or this won't work
