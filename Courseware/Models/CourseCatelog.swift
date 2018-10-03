@@ -118,7 +118,7 @@ class CourseCatelog {
 //                guard url.pathExtension == self.fileExtension else { continue }
                 guard url.lastPathComponent != self.assetsFile else {
                     DispatchQueue.global().async {
-                        CourseCatelog.removeFile(fromPath: url.absoluteString, useMediaDirectory: false)
+                        _ = CourseCatelog.removeFile(fromPath: url.absoluteString, useMediaDirectory: false)
                     }
                     continue
                 }
@@ -158,18 +158,47 @@ class CourseCatelog {
         }
         
         dispatchGroup.enter()
+        var zipHadXMLFile = false
+        var directoryToMoveFrom: URL? = nil
         DispatchQueue.global().async {
             do {
                 let oldCopy = CourseCatelog.mediaDirectory.appendingPathComponent(courseURL.lastPathComponent).absoluteString
-                CourseCatelog.removeFile(fromPath: oldCopy)
+                let dirForXML = CourseCatelog.removeFile(fromPath: oldCopy)
                 
                 try Zip.unzipFile(courseURL, destination: CourseCatelog.mediaDirectory, overwrite: true, password: CourseCatelog.phrases[5])
                 shouldReturnZip = true
+                if let scan = dirForXML {
+                    zipHadXMLFile = CourseCatelog.isXMLFilePresent(directory: scan)
+                    if zipHadXMLFile {
+                        directoryToMoveFrom = scan
+                    }
+                }
             } catch {
                 print("Error during unzip: \(error)")
                 shouldReturnZip = false
             }
             dispatchGroup.leave()
+        }
+        
+        dispatchGroup.wait()
+        
+        if (CourseCatelog.currentProgram == .undefined) && !zipHadXMLFile {
+            return nil
+        }
+        
+        dispatchGroup.enter()
+        if let dir = directoryToMoveFrom, zipHadXMLFile {
+            DispatchQueue.global().async {
+                let _ = CourseCatelog.moveInternalXML(directory: dir)
+                dispatchGroup.leave()
+            }
+        } else {
+            if CourseCatelog.currentProgram == .undefined {
+                dispatchGroup.leave()
+                return nil
+            } else {
+                dispatchGroup.leave()
+            }
         }
         
         dispatchGroup.wait()
@@ -199,22 +228,28 @@ class CourseCatelog {
             dispatchGroup.leave()
         }
         
-        //TODO: - This will have to be done only if the XML file is not present in the bundle
         dispatchGroup.enter()
         DispatchQueue.global().async {
-            moveXML(program: course.program)
+            CourseCatelog.moveXML(program: course.program)
             dispatchGroup.leave()
         }
         
         dispatchGroup.enter()
+        var zipHadXMLFile = false
+        var directoryToMoveFrom: URL? = nil
         DispatchQueue.global().async {
             do {
                 let oldCopy = CourseCatelog.mediaDirectory.appendingPathComponent(url.lastPathComponent).absoluteString
-                CourseCatelog.removeFile(fromPath: oldCopy)
+                let dirForXML = CourseCatelog.removeFile(fromPath: oldCopy)
                 
                 try Zip.unzipFile(url, destination: CourseCatelog.mediaDirectory, overwrite: true, password: CourseCatelog.phrases[5])
-                //TODO: - Need to check the unzip area for the getXML bundle
                 shouldReturnZip = true
+                if let scan = dirForXML {
+                    zipHadXMLFile = CourseCatelog.isXMLFilePresent(directory: scan)
+                    if zipHadXMLFile {
+                        directoryToMoveFrom = scan
+                    }
+                }
             } catch {
                 print("Error during unzip: \(error)")
                 shouldReturnZip = false
@@ -224,9 +259,26 @@ class CourseCatelog {
         
         dispatchGroup.wait()
         
-        if currentProgram == .undefined {
+        if (currentProgram == .undefined) && !zipHadXMLFile {
             return nil
         }
+        
+        dispatchGroup.enter()
+        if let dir = directoryToMoveFrom, zipHadXMLFile {
+            DispatchQueue.global().async {
+                let _ = CourseCatelog.moveInternalXML(directory: dir)
+                dispatchGroup.leave()
+            }
+        } else {
+            if currentProgram == .undefined {
+                dispatchGroup.leave()
+                return nil
+            } else {
+                dispatchGroup.leave()
+            }
+        }
+        
+        dispatchGroup.wait()
         
         if shouldReturnZip && shouldReturnJS {
             do {
@@ -238,6 +290,31 @@ class CourseCatelog {
             return htmlPath
         } else {
             return nil
+        }
+    }
+    
+    private static func isXMLFilePresent(directory url: URL) -> Bool {
+        do {
+            let files = try FileManager.default.contentsOfDirectory(atPath: url.path)
+            let modFiles = files.map { return $0.lowercased() }
+            return modFiles.contains("getxml.js")
+        } catch {
+            print(error)
+            return false
+        }
+    }
+    
+    private static func moveInternalXML(directory url: URL) -> Bool {
+        CourseCatelog.removeXMLFile()
+        do {
+            let xmlFile = "getXML.js"
+            let fileToCopy = url.appendingPathComponent(xmlFile)
+            try FileManager.default.copyItem(at: fileToCopy, to: CourseCatelog.xmlDirectory.appendingPathComponent("getXML.js"))
+            CourseCatelog.currentProgram = .undefined
+            return true
+        } catch {
+            print("Well shit....this threw and error and should not have")
+            return false
         }
     }
     
@@ -277,43 +354,48 @@ class CourseCatelog {
         }
     }
     
-    private static func removeFile(fromPath: String, useMediaDirectory: Bool = true) {
+    private static func removeFile(fromPath: String, useMediaDirectory: Bool = true) -> URL? {
         let passedFileURL = URL(string: fromPath)
         guard let passedFile = passedFileURL else {
-            return
+            return nil
         }
         let toSplit = passedFile.lastPathComponent
         let split = toSplit.split(separator: ".")
         guard split.count > 0 else {
-            return
+            return nil
         }
         guard let contents = split.first else {
-            return
+            return nil
         }
+        let splitContents = contents.split(separator: ")")
+        let workingString = splitContents[1]
+        let courseDirectory = workingString.dropFirst()
         let contentString: String
         if useMediaDirectory {
-            contentString = String(contents)
+            contentString = String(courseDirectory)
         } else {
             contentString = toSplit
         }
         let dirToParse: URL
+        let checkString: String
         if useMediaDirectory {
             dirToParse = CourseCatelog.mediaDirectory.appendingPathComponent(contentString)
+            checkString = "Content/\(contentString)"
         } else {
-//            dirToParse = courseScanDirectory.appendingPathComponent(contentString)
             dirToParse = CourseCatelog.tempDirectory.appendingPathComponent(contentString)
+            checkString = contentString
         }
         
         do {
             let fileManager = FileManager()
             print(dirToParse.absoluteString)
-            if StaticMethods.doesWebDirectoryExist(contentString) {
-            let files = try fileManager.contentsOfDirectory(at: dirToParse, includingPropertiesForKeys: nil)
-            if (files.count > 0) {
-                for file in files {
-                    print("removing item: \(file)")
-                    try fileManager.removeItem(at: file)
-                }
+            if StaticMethods.doesWebDirectoryExist(checkString) {
+                let files = try fileManager.contentsOfDirectory(at: dirToParse, includingPropertiesForKeys: nil)
+                if (files.count > 0) {
+                    for file in files {
+                        print("removing item: \(file)")
+                        try fileManager.removeItem(at: file)
+                    }
             }
             print("removing the directory")
             try fileManager.removeItem(at: dirToParse)
@@ -327,11 +409,12 @@ class CourseCatelog {
                     print("Nothing to remove, moving on")
                 }
             }
+            return dirToParse
             
         }
         catch {
             print("Error removing file that should exist: \(error)")
-            return
+            return nil
         }
     }
 }

@@ -90,10 +90,6 @@ struct Course: Comparable, Equatable {
             return false
         }
     }
-    
-    //let programs: [String] = ["T1-UPT", "T38-UPT", "T38-IFF", "T38-PIT", "T6-UPT", "T6-RIQ"]
-    //let newFile = "(\(program))_\(url.lastPathComponent).\(customExtension)"
-    //(T6-UPT)_T6_CO101_CBT_media.acware
 }
 
 enum CourseErrors: Error {

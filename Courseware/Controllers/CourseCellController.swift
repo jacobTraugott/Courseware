@@ -59,10 +59,12 @@ class CourseCell: UITableViewCell {
         
         if let goodUrl = url {
             print("good url, loading action")
-            self.doneLoadingAction(goodUrl)
+            DispatchQueue.main.async {
+                self.doneLoadingAction(goodUrl)
+            }
         } else {
             print("bad url, failure action")
-            self.failedToLoadAction("Could not find \(self.displayName) in files.")
+            self.failedToLoadAction("Could not find \(self.displayName ?? "") in files.")
         }
     }
 }

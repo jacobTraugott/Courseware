@@ -15,7 +15,7 @@ enum StaticMethods {
     static func doesWebDirectoryExist(_ dir: String) -> Bool {
         let combined = tempDirectory.appendingPathComponent(dir, isDirectory: true)
         do {
-            _ = try FileManager.default.contentsOfDirectory(at: combined, includingPropertiesForKeys: nil)
+            let _ = try FileManager.default.contentsOfDirectory(atPath: combined.path)
             return true
         } catch {
             return false

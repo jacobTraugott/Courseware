@@ -18,6 +18,9 @@ enum Program: Int, CustomStringConvertible {
     case undefined = 6
     case T6_PIT = 7
     case T6_CSO = 8
+    case ENJPPT_T38 = 9
+    case ENJPPT_T6 = 10
+    case ENJPPT_IFF = 11
     
     var description: String {
         switch self {
@@ -39,6 +42,12 @@ enum Program: Int, CustomStringConvertible {
             return "T6-CSO"
         case .T6_PIT:
             return "T6-PIT"
+        case .ENJPPT_T6:
+            return "ENJPPT-T6"
+        case .ENJPPT_IFF:
+            return "ENJPPT-IFF"
+        case .ENJPPT_T38:
+            return "ENJPPT-T38"
         }
     }
     
@@ -62,14 +71,31 @@ enum Program: Int, CustomStringConvertible {
             return "(T6P)getXML"
         case .T6_CSO:
             return "(T6C)getXML"
+        case .ENJPPT_IFF:
+            return "(ENJPPT-IFF)getXML"
+        case .ENJPPT_T38:
+            return "(ENJPPT-T38)getXML"
+        case .ENJPPT_T6:
+            return "(ENJPPT-T6)getXML"
         }
     }
     
-    //programs = ["T1-UPT", "T38-UPT", "T38-IFF", "T38-PIT", "T6-UPT", "T6-RIQ"]
     static func fromString(_ value: String) -> Program {
         let value = value.lowercased()
         if (value.contains("t1")) {
             return .T1_UPT
+        }
+        
+        if (value.contains("enjppt")) {
+            if (value.contains("iff")) {
+                return .ENJPPT_IFF
+            }
+            if (value.contains("t38")) {
+                return .ENJPPT_T38
+            }
+            if (value.contains("t6")) {
+                return .ENJPPT_T6
+            }
         }
         
         if (value.contains("t6")) {
