@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
-        if let homeURL = CourseCatelog.openCourse(fromURL: url) {
+        if let homeURL = CourseCatelog.openCourse(fromURL: url, copySourceFileToLibrary: true) {
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let webVC: WebViewController = storyboard.instantiateViewController(withIdentifier: "webViewForCourse") as! WebViewController
             webVC.lessonURL = homeURL

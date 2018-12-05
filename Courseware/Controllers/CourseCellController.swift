@@ -32,18 +32,23 @@ class CourseCell: UITableViewCell {
             print("ran through activity start code")
         }
         DispatchQueue.global().async {
-            self.openCourse()
+            self.openCourse(courseObject: self.courseCatelog.allCourses[self.index])
         }
     }
     
-    private func openCourse() {
+    func openCourse(courseObject course: Course) {
+        openCourseObject(course)
+    }
+    
+    private func openCourseObject(_ course: Course) {
         var url: URL?
+        let courseURL = course
         let dispatchGroup = DispatchGroup()
         print("entered dispatch group")
         dispatchGroup.enter()
-        DispatchQueue.global().async {
+        DispatchQueue.global(qos: .userInitiated).async {
             print("started opening course")
-            url = self.courseCatelog.openCourse(index: self.index, courseName: self.displayName, aircraft: self.aircraftText)
+            url = CourseCatelog.openCourse(fromURL: courseURL.url)
             dispatchGroup.leave()
             print("done opening course")
         }

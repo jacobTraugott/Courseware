@@ -51,7 +51,7 @@ class CourseCatelog {
     }
     
     func loadCourses(completion: @escaping ([Course]) -> Void) {
-        ioQueue.addOperation { //[weak self] in
+        ioQueue.addOperation {
             var courses: [Course] = []
             var foundCourseURLs: [String:URL] = [:]
             defer {
@@ -97,9 +97,9 @@ class CourseCatelog {
                         print("error: \(error)")
                     }
                     if StaticMethods.doesWebDirectoryExist(self.assetsDirectory) {
-                        print("Worked")
+                        print("Web Directory successfully created, program is working")
                     } else {
-                        print("Fuck")
+                        print("There's a bug associated with creating the web directory from the Assets file.")
                     }   
                 }
             }
@@ -115,7 +115,6 @@ class CourseCatelog {
                     }
                 }
                 guard goodExtension else { continue }
-//                guard url.pathExtension == self.fileExtension else { continue }
                 guard url.lastPathComponent != self.assetsFile else {
                     DispatchQueue.global().async {
                         _ = CourseCatelog.removeFile(fromPath: url.absoluteString, useMediaDirectory: false)
@@ -133,91 +132,14 @@ class CourseCatelog {
         }
     }
     
-    func openCourse(index: Int, courseName: String, aircraft: String) -> URL? {
-        let dispatchGroup = DispatchGroup()
-        var shouldReturnJS: Bool = false
-        var shouldReturnZip: Bool = false
-        let courseURL = self.allCourses[index].url
-        let courseProgram = self.allCourses[index].program
-        let trainingType = StaticMethods.isFileCBTorIBT(url: courseURL)
-        guard trainingType != .none else {
-            return nil
-        }
-        let isCBT = trainingType == .cbt
-        Zip.addCustomFileExtension(CourseCatelog.customExt)
-        dispatchGroup.enter()
-        DispatchQueue.global().async {
-            shouldReturnJS = StaticMethods.createJavaScriptFile(lessonName: courseName, aircraft: aircraft, isCBT: isCBT)
-            dispatchGroup.leave()
-        }
-        
-        dispatchGroup.enter()
-        DispatchQueue.global().async {
-            CourseCatelog.moveXML(program: courseProgram)
-            dispatchGroup.leave()
-        }
-        
-        dispatchGroup.enter()
-        var zipHadXMLFile = false
-        var directoryToMoveFrom: URL? = nil
-        DispatchQueue.global().async {
-            do {
-                let oldCopy = CourseCatelog.mediaDirectory.appendingPathComponent(courseURL.lastPathComponent).absoluteString
-                let dirForXML = CourseCatelog.removeFile(fromPath: oldCopy)
-                
-                try Zip.unzipFile(courseURL, destination: CourseCatelog.mediaDirectory, overwrite: true, password: CourseCatelog.phrases[5])
-                shouldReturnZip = true
-                if let scan = dirForXML {
-                    zipHadXMLFile = CourseCatelog.isXMLFilePresent(directory: scan)
-                    if zipHadXMLFile {
-                        directoryToMoveFrom = scan
-                    }
-                }
-            } catch {
-                print("Error during unzip: \(error)")
-                shouldReturnZip = false
-            }
-            dispatchGroup.leave()
-        }
-        
-        dispatchGroup.wait()
-        
-        if (CourseCatelog.currentProgram == .undefined) && !zipHadXMLFile {
-            return nil
-        }
-        
-        dispatchGroup.enter()
-        if let dir = directoryToMoveFrom, zipHadXMLFile {
-            DispatchQueue.global().async {
-                let _ = CourseCatelog.moveInternalXML(directory: dir)
-                dispatchGroup.leave()
-            }
-        } else {
-            if CourseCatelog.currentProgram == .undefined {
-                dispatchGroup.leave()
-                return nil
-            } else {
-                dispatchGroup.leave()
-            }
-        }
-        
-        dispatchGroup.wait()
-        
-        if shouldReturnZip && shouldReturnJS {
-            let htmlPath = CourseCatelog.tempDirectory.appendingPathComponent("Home.html")
-            return htmlPath
-        } else {
-            return nil
-        }
-    }
-    
-    static func openCourse(fromURL url: URL) -> URL? {
+    static func openCourse(fromURL url: URL, copySourceFileToLibrary: Bool = false) -> URL? {
         let course = Course(fileName: url)
         let dispatchGroup = DispatchGroup()
         var shouldReturnJS: Bool = false
         var shouldReturnZip: Bool = false
         let trainingType = StaticMethods.isFileCBTorIBT(url: url)
         guard trainingType != .none else {
+            print("found bad training type, returning nil URL")
             return nil
         }
         let isCBT = trainingType == .cbt
@@ -229,25 +151,22 @@ class CourseCatelog {
         }
         
         dispatchGroup.enter()
-        DispatchQueue.global().async {
-            CourseCatelog.moveXML(program: course.program)
-            dispatchGroup.leave()
-        }
-        
-        dispatchGroup.enter()
         var zipHadXMLFile = false
-        var directoryToMoveFrom: URL? = nil
         DispatchQueue.global().async {
             do {
                 let oldCopy = CourseCatelog.mediaDirectory.appendingPathComponent(url.lastPathComponent).absoluteString
                 let dirForXML = CourseCatelog.removeFile(fromPath: oldCopy)
-                
+                CourseCatelog.removeXMLFile()
                 try Zip.unzipFile(url, destination: CourseCatelog.mediaDirectory, overwrite: true, password: CourseCatelog.phrases[5])
                 shouldReturnZip = true
                 if let scan = dirForXML {
                     zipHadXMLFile = CourseCatelog.isXMLFilePresent(directory: scan)
-                    if zipHadXMLFile {
-                        directoryToMoveFrom = scan
+                    if !zipHadXMLFile {
+                        print("Zip File did not contain XML JS, grabbing local bundle")
+                        CourseCatelog.moveXML(program: course.program)
+                    } else {
+                        print("Zip File had local XML JS")
+                        let _ = CourseCatelog.moveInternalXML(directory: scan)
                     }
                 }
             } catch {
@@ -259,32 +178,28 @@ class CourseCatelog {
         
         dispatchGroup.wait()
         
-        if (currentProgram == .undefined) && !zipHadXMLFile {
-            return nil
-        }
-        
-        dispatchGroup.enter()
-        if let dir = directoryToMoveFrom, zipHadXMLFile {
-            DispatchQueue.global().async {
-                let _ = CourseCatelog.moveInternalXML(directory: dir)
-                dispatchGroup.leave()
-            }
-        } else {
-            if currentProgram == .undefined {
-                dispatchGroup.leave()
-                return nil
-            } else {
-                dispatchGroup.leave()
-            }
-        }
-        
-        dispatchGroup.wait()
-        
         if shouldReturnZip && shouldReturnJS {
-            do {
-                try FileManager.default.copyItem(at: url, to: CourseCatelog.courseScanDirectory.appendingPathComponent(url.lastPathComponent))
-            } catch {
-                print(error)
+            if copySourceFileToLibrary {
+                
+                let fileManager = FileManager.default
+                let copyLocation = CourseCatelog.courseScanDirectory.appendingPathComponent(url.lastPathComponent)
+                let copyPath = copyLocation.path
+                do {
+                    if fileManager.fileExists(atPath: copyPath) {
+                        print("File already exists at copy location, let's overwrite.")
+                        try fileManager.removeItem(atPath: copyPath)
+                        print("File successfully removed")
+                    }
+                }
+                catch {
+                    print("Error during delete file operation; file was marked as existing but could not delete? Error text: \(error)")
+                }
+                do {
+                    print("Copying file from import to CW Docs Directory")
+                    try fileManager.copyItem(at: url, to: copyLocation)
+                } catch {
+                    print("During copy operation, error occurred: \(error)")
+                }
             }
             let htmlPath = CourseCatelog.tempDirectory.appendingPathComponent("Home.html")
             return htmlPath
@@ -305,11 +220,12 @@ class CourseCatelog {
     }
     
     private static func moveInternalXML(directory url: URL) -> Bool {
-        CourseCatelog.removeXMLFile()
         do {
             let xmlFile = "getXML.js"
             let fileToCopy = url.appendingPathComponent(xmlFile)
+            print("Copying: \(fileToCopy)")
             try FileManager.default.copyItem(at: fileToCopy, to: CourseCatelog.xmlDirectory.appendingPathComponent("getXML.js"))
+            print("Copy operation success")
             CourseCatelog.currentProgram = .undefined
             return true
         } catch {
@@ -324,33 +240,51 @@ class CourseCatelog {
             return
         }
         
-        if CourseCatelog.currentProgram == program {
-            print("same program")
-            return
-        }
-        
-        // TODO: - Check this for compliance with new courseware distribution setup
         if let newBundle = Bundle.main.url(forResource: program.getBundleName, withExtension: "js") {
             do {
                 // Have to rename the file or this won't work
-                CourseCatelog.removeXMLFile()
+                print("Course XML Directory: \(CourseCatelog.xmlDirectory.absoluteString)")
+                print("Copying getXML.JS file to XML Directory")
                 try FileManager.default.copyItem(at: newBundle, to: CourseCatelog.xmlDirectory.appendingPathComponent("getXML.js"))
+                print("getXML.JS file copied")
                 CourseCatelog.currentProgram = program
+                print("program set")
             } catch {
-                print("Error copying bundle: \(error)")
+                print("Error copying getXML.js bundle: \(error)")
             }
         } else {
-            print("Bundle not set, we done fucked up here")
+            print("getXML.js bundle not set, program not set")
             return
         }
     }
-    
+
     private static func removeXMLFile() {
         do {
             let fm = FileManager()
+            print("attempting getXML.js removal")
             try fm.removeItem(at: CourseCatelog.xmlDirectory.appendingPathComponent("getXML.js"))
+            print("getXML.js removed, continuing")
         } catch {
-            print("what the fuck?? this should have fucking worked! fuck you!")
+            print("getXML.js removal failed, this is a problem")
+        }
+    }
+    
+    func removeCoursewareFile(fromURL: URL) {
+        let filteredCourses = allCourses.filter { $0.url == fromURL }
+        if filteredCourses.count >= 1 {
+            print("found a course to remove, deleting from array")
+            let course = filteredCourses.first!
+            let index = allCourses.firstIndex(of: course)!
+            allCourses.remove(at: index)
+            do {
+                print("deleting file...")
+                try FileManager.default.removeItem(at: fromURL)
+                print("delete was successful")
+            } catch {
+                print("Error encountered while deleting file: \(error)")
+            }
+        } else {
+            print("no courses found to remove")
         }
     }
     
@@ -393,9 +327,9 @@ class CourseCatelog {
                 let files = try fileManager.contentsOfDirectory(at: dirToParse, includingPropertiesForKeys: nil)
                 if (files.count > 0) {
                     for file in files {
-                        print("removing item: \(file)")
                         try fileManager.removeItem(at: file)
                     }
+                    print("Removed individual files from directory")
             }
             print("removing the directory")
             try fileManager.removeItem(at: dirToParse)

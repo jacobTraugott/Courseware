@@ -15,6 +15,12 @@ class WebViewController: UIViewController, WKUIDelegate, WKNavigationDelegate, U
     var webViewer: WKWebView!
     var openedFromAppDelegate: Bool = false
     
+    var edgeCloseSwipeGesture: UIScreenEdgePanGestureRecognizer!
+    var panCloseSwipeGesture: UIPanGestureRecognizer!
+    var lessonSwipeGesture: UIPanGestureRecognizer!
+    
+    private let backJSFunction = "var media = $(\"#media div\").length; $('#progressbar').attr(\"value\", currentFrameIndex - 1); value = $(\"#progressbar\").attr(\"value\");if (media < 1) { $(\"#media\").hide(); } else { $(\"#media\").show(); } if (currentFrameIndex == 1) { $(\"a.backBtn\").prop(\"disabled\", true).attr('style', 'background-position: -106px -72px'); } progressBarCbt(); MoveBackward();"
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -40,28 +46,68 @@ class WebViewController: UIViewController, WKUIDelegate, WKNavigationDelegate, U
         webConfig.userContentController = userContentController
         webViewer = WKWebView(frame: view.frame, configuration: webConfig)
         webViewer.contentMode = .scaleToFill
+        print("Lesson: \(lessonURL.absoluteString)")
         webViewer.loadFileURL(lessonURL, allowingReadAccessTo: documentsDirectory)
         webViewer.navigationDelegate = self
         webViewer.uiDelegate = self
         webViewer.scrollView.bounces = false
+        webViewer.isUserInteractionEnabled = true
         
         webViewer.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         view.addSubview(webViewer)
         
-        let swipeGesture = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(closeLesson(_:)))
-        swipeGesture.edges = .left
-        swipeGesture.delegate = self
-        view.addGestureRecognizer(swipeGesture)
+        edgeCloseSwipeGesture = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(closeLesson(_:)))
+        edgeCloseSwipeGesture.edges = .left
+        edgeCloseSwipeGesture.delegate = self
+        edgeCloseSwipeGesture.cancelsTouchesInView = true
+        view.addGestureRecognizer(edgeCloseSwipeGesture)
+        
+        panCloseSwipeGesture = UIPanGestureRecognizer(target: self, action: #selector(closeLessonFromScreenPan(_:)))
+        panCloseSwipeGesture.delegate = self
+        panCloseSwipeGesture.minimumNumberOfTouches = 2
+        panCloseSwipeGesture.cancelsTouchesInView = true
+        view.addGestureRecognizer(panCloseSwipeGesture)
+
+        lessonSwipeGesture = UIPanGestureRecognizer(target: self, action: #selector(moveLessonProgress(_:)))
+        lessonSwipeGesture.delegate = self
+        lessonSwipeGesture.minimumNumberOfTouches = 1
+        lessonSwipeGesture.maximumNumberOfTouches = 1
+        lessonSwipeGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(lessonSwipeGesture)
     }
     
     @objc func closeLesson(_ sender: UIScreenEdgePanGestureRecognizer) {
-        let dX = sender.translation(in: view).x
-        if sender.state == .ended {
-            let fraction = abs(dX / view.bounds.width)
-            if fraction >= 0.35 {
-                closeWindow()
+        let dX = abs(sender.translation(in: self.view).x / self.view.bounds.width)
+        if dX >= 0.25 {
+            closeWindow()
+        }
+    }
+    
+    @objc func closeLessonFromScreenPan(_ sender: UIPanGestureRecognizer) {
+        let speed = sender.velocity(in: self.view).x
+        let dX = abs(sender.translation(in: self.view).x / self.view.bounds.width)
+        let swipeLeft = speed > 0
+        
+        if swipeLeft && dX >= 0.25 {
+            closeWindow()
+        }
+    }
+    
+    @objc func moveLessonProgress(_ sender: UIPanGestureRecognizer) {
+        let speed = sender.velocity(in: self.view).x
+        let dX = abs(sender.translation(in: self.view).x / self.view.bounds.width)
+        let swipeLeft = speed > 0
+        
+        if sender.state == .ended && dX > 0.1 {
+            if swipeLeft {
+                //user is going back in the lesson
+                self.webViewer.evaluateJavaScript(backJSFunction, completionHandler: nil)
+            } else {
+                //user is advancing the lesson
+                self.webViewer.evaluateJavaScript("MoveForwardFromHotspot();", completionHandler: nil)
             }
         }
+        
     }
     
     func closeWindow() {
@@ -77,12 +123,20 @@ class WebViewController: UIViewController, WKUIDelegate, WKNavigationDelegate, U
             self.dismiss(animated: true, completion: nil)
         }
     }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        if gestureRecognizer == self.edgeCloseSwipeGesture && otherGestureRecognizer == self.lessonSwipeGesture {
+            return true
+        } else {
+            return false
+        }
+    }
 }
 
 extension WebViewController: WKScriptMessageHandler {
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         print("recieved message")
-        guard let payload = message.body as? [String: Any],
+        guard let payload = message.body as? [String : Any],
             let msg = payload["message"], let msgAction = msg as? String else {
                 return
         }

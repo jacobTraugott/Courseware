@@ -47,6 +47,32 @@ class CourseListViewController: UITableViewController {
         return 50
     }
     
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("initiated course opening from tableView delegate")
+        if let cell = tableView.cellForRow(at: indexPath) {
+            let courseCell = cell as! CourseCell
+            DispatchQueue.main.async {
+                print("hide button, starting activity spinner")
+                courseCell.activity.isHidden = false
+                courseCell.activity.startAnimating()
+                courseCell.takeCourseButton.isHidden = true
+                print("ran through activity start code")
+            }
+            DispatchQueue.global().async {
+                courseCell.openCourse(courseObject: self.courseCatelog.allCourses[indexPath.row])
+            }
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            let course = courses[indexPath.row]
+            courses.remove(at: indexPath.row)
+            courseCatelog.removeCoursewareFile(fromURL: course.url)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+        }
+    }
+    
     func reloadCourses() {
         refreshControl?.beginRefreshing()
         courseCatelog.loadCourses { (foundCourses) in
