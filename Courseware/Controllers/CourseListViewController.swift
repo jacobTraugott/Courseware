@@ -21,6 +21,15 @@ class CourseListViewController: UITableViewController {
         reloadCourses()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        UIViewController.attemptRotationToDeviceOrientation()
+    }
+    
+    override var shouldAutorotate: Bool {
+        return true
+    }
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return courses.count
     }

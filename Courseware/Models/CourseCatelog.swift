@@ -301,12 +301,18 @@ class CourseCatelog {
         guard let contents = split.first else {
             return nil
         }
-        let splitContents = contents.split(separator: ")")
-        let workingString = splitContents[1]
-        let courseDirectory = workingString.dropFirst()
+        
         let contentString: String
         if useMediaDirectory {
-            contentString = String(courseDirectory)
+            if contents.contains(")") {
+                //this can fail with old files that do not have the ) character
+                let splitContents = contents.split(separator: ")")
+                let workingString = splitContents[1]
+                let courseDirectory = workingString.dropFirst()
+                contentString = String(courseDirectory)
+            } else {
+                contentString = String(contents)
+            }
         } else {
             contentString = toSplit
         }

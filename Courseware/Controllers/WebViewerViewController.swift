@@ -58,6 +58,7 @@ class WebViewController: UIViewController, WKUIDelegate, WKNavigationDelegate, U
         
         edgeCloseSwipeGesture = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(closeLesson(_:)))
         edgeCloseSwipeGesture.edges = .left
+        edgeCloseSwipeGesture.maximumNumberOfTouches = 1
         edgeCloseSwipeGesture.delegate = self
         edgeCloseSwipeGesture.cancelsTouchesInView = true
         view.addGestureRecognizer(edgeCloseSwipeGesture)
@@ -65,15 +66,16 @@ class WebViewController: UIViewController, WKUIDelegate, WKNavigationDelegate, U
         panCloseSwipeGesture = UIPanGestureRecognizer(target: self, action: #selector(closeLessonFromScreenPan(_:)))
         panCloseSwipeGesture.delegate = self
         panCloseSwipeGesture.minimumNumberOfTouches = 2
+        panCloseSwipeGesture.maximumNumberOfTouches = 2
         panCloseSwipeGesture.cancelsTouchesInView = true
         view.addGestureRecognizer(panCloseSwipeGesture)
 
         lessonSwipeGesture = UIPanGestureRecognizer(target: self, action: #selector(moveLessonProgress(_:)))
         lessonSwipeGesture.delegate = self
-        lessonSwipeGesture.minimumNumberOfTouches = 1
         lessonSwipeGesture.maximumNumberOfTouches = 1
         lessonSwipeGesture.cancelsTouchesInView = false
         view.addGestureRecognizer(lessonSwipeGesture)
+        
     }
     
     @objc func closeLesson(_ sender: UIScreenEdgePanGestureRecognizer) {
@@ -125,10 +127,15 @@ class WebViewController: UIViewController, WKUIDelegate, WKNavigationDelegate, U
     }
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        if gestureRecognizer == self.edgeCloseSwipeGesture && otherGestureRecognizer == self.lessonSwipeGesture {
-            return true
-        } else {
+        
+        if gestureRecognizer == lessonSwipeGesture && otherGestureRecognizer != lessonSwipeGesture {
             return false
+        } else if gestureRecognizer == edgeCloseSwipeGesture && otherGestureRecognizer == lessonSwipeGesture {
+            return false
+        } else if gestureRecognizer == panCloseSwipeGesture {
+            return false
+        } else {
+            return true
         }
     }
 }
