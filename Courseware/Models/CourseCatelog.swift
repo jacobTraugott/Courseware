@@ -67,8 +67,7 @@ class CourseCatelog {
             }
 
             DispatchQueue.global().async {
-                if (!StaticMethods.doesWebDirectoryExist(self.assetsDirectory)) {
-                    
+                //if (!StaticMethods.doesWebDirectoryExist(self.assetsDirectory)) {
                     if (urls.filter { $0.lastPathComponent == self.assetsFile }).count == 0 {
                         if let bundleURL = Bundle.main.url(forResource: "Assets", withExtension: "zip") {
                             do {
@@ -101,7 +100,7 @@ class CourseCatelog {
                     } else {
                         print("There's a bug associated with creating the web directory from the Assets file.")
                     }   
-                }
+                //}
             }
             
             //Generate a new array of courses from the zip files on disk
