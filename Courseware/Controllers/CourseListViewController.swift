@@ -9,15 +9,18 @@
 import UIKit
 import WebKit
 
-class CourseListViewController: UITableViewController {
+class CourseListViewController: UITableViewController, UISearchResultsUpdating, UISearchBarDelegate {
+    
     var courses: [Course] = []
+    var filteredCourses: [Course] = []
     let courseCatelog = CourseCatelog()
     let courseCellID: String = "CourseCellID"
+    var searchResultController = UISearchController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        refreshControl = UIRefreshControl()
-        refreshControl?.addTarget(self, action: #selector(handleRefresh(_:)), for: .valueChanged)
+        addRefreshControl()
+        addSearchController()
         reloadCourses()
     }
     
@@ -30,13 +33,64 @@ class CourseListViewController: UITableViewController {
         return true
     }
     
+    private func addRefreshControl() {
+        refreshControl = UIRefreshControl()
+        refreshControl?.addTarget(self, action: #selector(handleRefresh(_:)), for: .valueChanged)
+    }
+    
+    private func addSearchController() {
+        searchResultController = ({
+            let controller = UISearchController(searchResultsController: nil)
+            controller.searchResultsUpdater = self
+            controller.dimsBackgroundDuringPresentation = false
+            controller.searchBar.sizeToFit()
+            tableView.tableHeaderView = controller.searchBar
+            return controller
+        })()
+        searchResultController.searchBar.delegate = self
+    }
+    
+    private func refillFilteredCourses() {
+        filteredCourses = courses.map { $0 }
+        self.tableView.reloadData()
+    }
+    
+    func updateSearchResults(for searchController: UISearchController) {
+        if let searchText = searchResultController.searchBar.text?.lowercased() {
+            guard searchText.trimmingCharacters(in: .whitespacesAndNewlines).count > 0 else {
+                refillFilteredCourses()
+                return
+            }
+            filteredCourses.removeAll(keepingCapacity: false)
+            filteredCourses = courses.filter { $0.displayName.lowercased().contains(searchText) || $0.aircraft.lowercased().contains(searchText) || $0.program.description.lowercased().contains(searchText)}
+            
+            self.tableView.reloadData()
+        } else {
+            refillFilteredCourses()
+        }
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchResultController.isActive = false
+        refillFilteredCourses()
+    }
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return courses.count
+        if searchResultController.isActive {
+            return filteredCourses.count
+        } else {
+            return courses.count
+        }
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: courseCellID, for: indexPath) as! CourseCell
-        let course = courses[indexPath.row]
+        let course: Course
+        if searchResultController.isActive {
+            course = filteredCourses[indexPath.row]
+        } else {
+            course = courses[indexPath.row]
+        }
         cell.aircraft.text = course.aircraft
         cell.courseName.text = course.displayName
         cell.displayName = course.displayName
@@ -89,6 +143,7 @@ class CourseListViewController: UITableViewController {
             self.refreshControl?.endRefreshing()
             self.tableView.reloadData()
         }
+        filteredCourses = courses.map { $0 }
     }
     
     @objc func handleRefresh(_ sender: UIRefreshControl) {
