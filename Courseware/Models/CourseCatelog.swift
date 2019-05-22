@@ -50,7 +50,37 @@ class CourseCatelog {
         return newItem
     }
     
+    private func retrieveFiles(at searchLocation: URL, performShallowSearch: Bool = true) -> [URL] {
+        if performShallowSearch {
+            guard let urls: [URL] = try? FileManager.default.contentsOfDirectory(at: CourseCatelog.courseScanDirectory, includingPropertiesForKeys: [], options: []) else {
+                return []
+            }
+            return urls
+        } else {
+            guard let enumerator = FileManager.default.enumerator(at: searchLocation, includingPropertiesForKeys: nil) else {
+                print("Unable to retrieve director enumerator")
+                return []
+            }
+            
+            var urls: [URL] = []
+            
+            for case let url as URL in enumerator {
+                urls.append(url)
+            }
+            return urls
+        }
+    }
+    
     func loadCourses(completion: @escaping ([Course]) -> Void) {
+        let dispatchGroup = DispatchGroup()
+        dispatchGroup.enter()
+        var urls: [URL] = []
+        DispatchQueue.global(qos: .default).async {
+            urls = self.retrieveFiles(at: CourseCatelog.courseScanDirectory, performShallowSearch: false)
+            dispatchGroup.leave()
+        }
+        dispatchGroup.wait()
+        
         ioQueue.addOperation {
             var courses: [Course] = []
             var foundCourseURLs: [String:URL] = [:]
@@ -62,57 +92,47 @@ class CourseCatelog {
                 }
             }
             
-            guard var urls: [URL] = try? FileManager.default.contentsOfDirectory(at: CourseCatelog.courseScanDirectory, includingPropertiesForKeys: [], options: []) else {
-                return
-            }
-
             DispatchQueue.global().async {
-                //if (!StaticMethods.doesWebDirectoryExist(self.assetsDirectory)) {
-                    if (urls.filter { $0.lastPathComponent == self.assetsFile }).count == 0 {
-                        if let bundleURL = Bundle.main.url(forResource: "Assets", withExtension: "zip") {
-                            do {
-                                print("Bundle: \(bundleURL)")
-                                let newUrl = CourseCatelog.tempDirectory.appendingPathComponent(self.assetsFile)
-                                print("New URL: \(newUrl)")
-                                try FileManager.default.copyItem(at: bundleURL, to: newUrl)
-                                urls.append(newUrl)
-                            } catch {
-                                print("Error copying bundle: \(error)")
-                            }
+                if (urls.filter { $0.lastPathComponent == self.assetsFile }).count == 0 {
+                    if let bundleURL = Bundle.main.url(forResource: "Assets", withExtension: "zip") {
+                        do {
+                            print("Bundle: \(bundleURL)")
+                            let newUrl = CourseCatelog.tempDirectory.appendingPathComponent(self.assetsFile)
+                            print("New URL: \(newUrl)")
+                            try FileManager.default.copyItem(at: bundleURL, to: newUrl)
+                            urls.append(newUrl)
+                        } catch {
+                            print("Error copying bundle: \(error)")
                         }
                     }
-                    
-                    guard let assetsPackage = (urls.filter { $0.lastPathComponent == self.assetsFile }).first else {
-                        self.hasAssetsFile = false
-                        return
-                    }
-                    
-                    self.hasAssetsFile = true
+                }
                 
-                    do {
-                        try Zip.unzipFile(assetsPackage, destination: CourseCatelog.tempDirectory, overwrite: true, password: nil)
-                    } catch {
-                        print("failed to unzip assets")
-                        print("error: \(error)")
-                    }
-                    if StaticMethods.doesWebDirectoryExist(self.assetsDirectory) {
-                        print("Web Directory successfully created, program is working")
-                    } else {
-                        print("There's a bug associated with creating the web directory from the Assets file.")
-                    }   
-                //}
+                guard let assetsPackage = (urls.filter { $0.lastPathComponent == self.assetsFile }).first else {
+                    self.hasAssetsFile = false
+                    return
+                }
+                
+                self.hasAssetsFile = true
+                
+                do {
+                    try Zip.unzipFile(assetsPackage, destination: CourseCatelog.tempDirectory, overwrite: true, password: nil)
+                } catch {
+                    print("failed to unzip assets")
+                    print("error: \(error)")
+                }
+                if StaticMethods.doesWebDirectoryExist(self.assetsDirectory) {
+                    print("Web Directory successfully created, program is working")
+                } else {
+                    print("There's a bug associated with creating the web directory from the Assets file.")
+                }
             }
             
             //Generate a new array of courses from the zip files on disk
             for url in urls {
                 print(url.path)
                 var goodExtension = false
-                for ext in CourseCatelog.fileExtensions {
-                    if url.pathExtension == ext {
-                        goodExtension = true
-                        continue
-                    }
-                }
+                
+                goodExtension = CourseCatelog.fileExtensions.contains(url.pathExtension)
                 guard goodExtension else { continue }
                 guard url.lastPathComponent != self.assetsFile else {
                     DispatchQueue.global().async {
@@ -123,11 +143,7 @@ class CourseCatelog {
                 let course = Course(fileName: url)
                 courses.append(course)
             }
-            
-            courses.sort(by: { (a, b) -> Bool in
-                //return a.displayName < b.displayName
-                return a < b
-            })
+            courses.sort(by: <)
         }
     }
     
