@@ -15,11 +15,12 @@ class CourseCell: UITableViewCell {
     @IBOutlet var programLabel: UILabel!
     @IBOutlet var takeCourseButton: UIButton!
     
-    var program: Program!
+    public var courseURL: URL!
+//    var program: Program!
     var aircraftText: String!
     var displayName: String!
-    var index: Int!
-    weak var courseCatelog: CourseCatelog!
+//    var index: Int!
+//    weak var courseCatelog: CourseCatelog!
     var doneLoadingAction: ((URL) -> Void)!
     var failedToLoadAction: ((String) -> Void)!
     
@@ -32,23 +33,22 @@ class CourseCell: UITableViewCell {
             print("ran through activity start code")
         }
         DispatchQueue.global().async {
-            self.openCourse(courseObject: self.courseCatelog.allCourses[self.index])
+            self.openCourse(at: self.courseURL)
         }
     }
     
     func openCourse(courseObject course: Course) {
-        openCourseObject(course)
+        openCourse(at: course.url)
     }
     
-    private func openCourseObject(_ course: Course) {
+    private func openCourse(at urlPassedIn: URL) {
         var url: URL?
-        let courseURL = course
         let dispatchGroup = DispatchGroup()
         print("entered dispatch group")
         dispatchGroup.enter()
         DispatchQueue.global(qos: .userInitiated).async {
             print("started opening course")
-            url = CourseCatelog.openCourse(fromURL: courseURL.url)
+            url = CourseCatelog.openCourse(fromURL: urlPassedIn)
             dispatchGroup.leave()
             print("done opening course")
         }

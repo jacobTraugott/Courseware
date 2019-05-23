@@ -16,9 +16,12 @@ class CourseListViewController: UITableViewController, UISearchResultsUpdating, 
     let courseCatelog = CourseCatelog()
     let courseCellID: String = "CourseCellID"
     var searchResultController = UISearchController()
+    var searchBar: UISearchBar!
+    var searchView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        definesPresentationContext = true
         addRefreshControl()
         addSearchController()
         reloadCourses()
@@ -45,6 +48,7 @@ class CourseListViewController: UITableViewController, UISearchResultsUpdating, 
             controller.dimsBackgroundDuringPresentation = false
             controller.searchBar.sizeToFit()
             tableView.tableHeaderView = controller.searchBar
+            searchView = controller.searchBar
             return controller
         })()
         searchResultController.searchBar.delegate = self
@@ -62,7 +66,8 @@ class CourseListViewController: UITableViewController, UISearchResultsUpdating, 
                 return
             }
             filteredCourses.removeAll(keepingCapacity: false)
-            filteredCourses = courses.filter { $0.displayName.lowercased().contains(searchText) || $0.aircraft.lowercased().contains(searchText) || $0.program.description.lowercased().contains(searchText)}
+            filteredCourses = courses.filter { $0.displayName.lowercased().contains(searchText) || $0.aircraft.lowercased().contains(searchText) || $0.program.description.lowercased().contains(searchText)
+            }
             
             self.tableView.reloadData()
         } else {
@@ -84,21 +89,21 @@ class CourseListViewController: UITableViewController, UISearchResultsUpdating, 
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: courseCellID, for: indexPath) as! CourseCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: courseCellID, for: indexPath) as? CourseCell else {
+            return UITableViewCell()
+        }
         let course: Course
         if searchResultController.isActive {
             course = filteredCourses[indexPath.row]
         } else {
             course = courses[indexPath.row]
         }
+        cell.courseURL = course.url
         cell.aircraft.text = course.aircraft
         cell.courseName.text = course.displayName
         cell.displayName = course.displayName
         cell.aircraftText = course.aircraft
-        cell.index = indexPath.row
-        cell.program = course.program
         cell.programLabel.text = course.program.description
-        cell.courseCatelog = courseCatelog
         cell.doneLoadingAction = presentCourse(_:)
         cell.failedToLoadAction = failedToPresentCourse(_:)
         cell.activity.stopAnimating()
@@ -122,15 +127,27 @@ class CourseListViewController: UITableViewController, UISearchResultsUpdating, 
                 print("ran through activity start code")
             }
             DispatchQueue.global().async {
-                courseCell.openCourse(courseObject: self.courseCatelog.allCourses[indexPath.row])
+                let courseObject = self.searchResultController.isActive ? self.filteredCourses[indexPath.row] : self.courseCatelog.allCourses[indexPath.row]
+                courseCell.openCourse(courseObject: courseObject)
             }
         }
     }
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            let course = courses[indexPath.row]
-            courses.remove(at: indexPath.row)
+            let course: Course
+            let indexToRemove: Int
+            if searchResultController.isActive {
+                course = filteredCourses[indexPath.row]
+                filteredCourses.remove(at: indexPath.row)
+                indexToRemove = courses.firstIndex(of: course) ?? indexPath.row
+            } else {
+                course = courses[indexPath.row]
+                indexToRemove = indexPath.row
+            }
+            //let course = courses[indexPath.row]
+            //courses.remove(at: indexPath.row)
+            courses.remove(at: indexToRemove)
             courseCatelog.removeCoursewareFile(fromURL: course.url)
             tableView.deleteRows(at: [indexPath], with: .automatic)
         }

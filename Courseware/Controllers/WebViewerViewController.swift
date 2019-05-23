@@ -19,31 +19,21 @@ class WebViewController: UIViewController, WKUIDelegate, WKNavigationDelegate, U
     var panCloseSwipeGesture: UIPanGestureRecognizer!
     var lessonSwipeGesture: UIPanGestureRecognizer!
     
-    private let backJSFunction = "var media = $(\"#media div\").length; $('#progressbar').attr(\"value\", currentFrameIndex - 1); value = $(\"#progressbar\").attr(\"value\");if (media < 1) { $(\"#media\").hide(); } else { $(\"#media\").show(); } if (currentFrameIndex == 1) { $(\"a.backBtn\").prop(\"disabled\", true).attr('style', 'background-position: -106px -72px'); } progressBarCbt(); MoveBackward();"
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-//        let values = [UIInterfaceOrientation.landscapeLeft, UIInterfaceOrientation.landscapeRight]
-//        let value = UIInterfaceOrientation.landscapeLeft.rawValue
-//        UIDevice.current.setValue(value, forKey: "orientation")
-        
+        setupWebView()
+        setupGestureRecognizers()
+    }
+    
+    private let backJSFunction = "var media = $(\"#media div\").length; $('#progressbar').attr(\"value\", currentFrameIndex - 1); value = $(\"#progressbar\").attr(\"value\");if (media < 1) { $(\"#media\").hide(); } else { $(\"#media\").show(); } if (currentFrameIndex == 1) { $(\"a.backBtn\").prop(\"disabled\", true).attr('style', 'background-position: -106px -72px'); } progressBarCbt(); MoveBackward();"
+    
+    private func setupWebView() {
         let prefs = WKPreferences()
         prefs.javaScriptEnabled = true
         
-        let scriptSource = "var buttons = document.getElementsByClassName('exitBtn'); var button = buttons[0]; button.onclick = function() { window.webkit.messageHandlers.buttonPressed.postMessage({\"message\" : \"exitCourse\"}); };"
-        let userContentController = WKUserContentController()
-        let userScript = WKUserScript(source: scriptSource,
-                                      injectionTime: .atDocumentEnd,
-                                      forMainFrameOnly: false)
-        userContentController.addUserScript(userScript)
-        // Advertise that we support receiving messages. Post them in JavaScript via:
-        // window.webkit.messageHandlers.buttonPressed.postMessage()
-        userContentController.add(self, name: "buttonPressed")
-        
         let webConfig = WKWebViewConfiguration()
         webConfig.preferences = prefs
-        webConfig.userContentController = userContentController
+        webConfig.userContentController = setupContentController()
         webViewer = WKWebView(frame: view.frame, configuration: webConfig)
         webViewer.contentMode = .scaleToFill
         print("Lesson: \(lessonURL.absoluteString)")
@@ -52,10 +42,28 @@ class WebViewController: UIViewController, WKUIDelegate, WKNavigationDelegate, U
         webViewer.uiDelegate = self
         webViewer.scrollView.bounces = false
         webViewer.isUserInteractionEnabled = true
+        webViewer.scrollView.isScrollEnabled = false
         
         webViewer.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         view.addSubview(webViewer)
-        
+    }
+    
+    private func setupContentController() -> WKUserContentController {
+        let scale = getViewPortScale()
+        let viewPortModifyScript = generateJavaScriptForViewPort(scale: scale)
+        let scriptSource = "var buttons = document.getElementsByClassName('exitBtn'); var button = buttons[0]; button.onclick = function() { window.webkit.messageHandlers.buttonPressed.postMessage({\"message\" : \"exitCourse\"}); };\(viewPortModifyScript)"
+        let userContentController = WKUserContentController()
+        let userScript = WKUserScript(source: scriptSource,
+                                      injectionTime: .atDocumentEnd,
+                                      forMainFrameOnly: false)
+        userContentController.addUserScript(userScript)
+        // Advertise that we support receiving messages. Post them in JavaScript via:
+        // window.webkit.messageHandlers.buttonPressed.postMessage()
+        userContentController.add(self, name: "buttonPressed")
+        return userContentController
+    }
+    
+    private func setupGestureRecognizers() {
         edgeCloseSwipeGesture = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(closeLesson(_:)))
         edgeCloseSwipeGesture.edges = .left
         edgeCloseSwipeGesture.maximumNumberOfTouches = 1
@@ -69,13 +77,12 @@ class WebViewController: UIViewController, WKUIDelegate, WKNavigationDelegate, U
         panCloseSwipeGesture.maximumNumberOfTouches = 2
         panCloseSwipeGesture.cancelsTouchesInView = true
         view.addGestureRecognizer(panCloseSwipeGesture)
-
+        
         lessonSwipeGesture = UIPanGestureRecognizer(target: self, action: #selector(moveLessonProgress(_:)))
         lessonSwipeGesture.delegate = self
         lessonSwipeGesture.maximumNumberOfTouches = 1
         lessonSwipeGesture.cancelsTouchesInView = false
         view.addGestureRecognizer(lessonSwipeGesture)
-        
     }
     
     @objc func closeLesson(_ sender: UIScreenEdgePanGestureRecognizer) {
@@ -109,7 +116,6 @@ class WebViewController: UIViewController, WKUIDelegate, WKNavigationDelegate, U
                 self.webViewer.evaluateJavaScript("MoveForwardFromHotspot();", completionHandler: nil)
             }
         }
-        
     }
     
     func closeWindow() {
@@ -137,6 +143,24 @@ class WebViewController: UIViewController, WKUIDelegate, WKNavigationDelegate, U
         } else {
             return true
         }
+    }
+    
+    func getViewPortScale() -> CGFloat {
+        let standardWidth: CGFloat = 1024.0
+        //This equates to a viewport of 1.0
+
+        let frame = UIScreen.main.bounds
+        let val1 = frame.height
+        let val2 = frame.width
+        let width = (val2 > val1 ? val2 : val1) - 39
+        let newViewPort = width / standardWidth
+        print("Calculated ViewPort is \(newViewPort)")
+        return newViewPort
+    }
+    
+    func generateJavaScriptForViewPort(scale: CGFloat) -> String {
+        let script = "var viewport = document.querySelector(\"meta[name=viewport]\");viewport.setAttribute('content', 'width=device-width, initial-scale=\(scale)');"
+        return script
     }
 }
 
