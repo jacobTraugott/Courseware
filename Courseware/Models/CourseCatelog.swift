@@ -63,7 +63,6 @@ class CourseCatelog {
             }
             
             var urls: [URL] = []
-            
             for case let url as URL in enumerator {
                 urls.append(url)
             }
