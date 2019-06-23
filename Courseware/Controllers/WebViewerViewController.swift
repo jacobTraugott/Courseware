@@ -146,16 +146,37 @@ class WebViewController: UIViewController, WKUIDelegate, WKNavigationDelegate, U
     }
     
     func getViewPortScale() -> CGFloat {
-        let standardWidth: CGFloat = 1024.0
         //This equates to a viewport of 1.0
-
-        let frame = UIScreen.main.bounds
-        let val1 = frame.height
-        let val2 = frame.width
-        let width = (val2 > val1 ? val2 : val1) - 39
-        let newViewPort = width / standardWidth
+        let standardWidth: CGFloat = 1024.0
+        let standardHeight: CGFloat = 770.0
+        let frame = screenSize
+        let screenHeight = frame.height
+        let screenWidth = frame.width
+        var newViewPort: CGFloat
+        let widthDiff = abs(standardWidth - screenWidth)
+        let heightDiff = abs(standardHeight - screenHeight)
+        if widthDiff > heightDiff {
+            newViewPort = screenHeight / standardHeight
+        } else {
+            newViewPort = screenWidth / standardWidth
+        }
+        newViewPort -= 0.039
         print("Calculated ViewPort is \(newViewPort)")
         return newViewPort
+    }
+    
+    private var screenSize: CGSize {
+        let application = UIApplication.shared
+        let orientation = application.statusBarOrientation
+        let bounds = UIScreen.main.bounds
+        let size: CGSize
+        if orientation.isLandscape {
+            size = CGSize(width: bounds.width, height: bounds.height)
+        } else {
+            let height = UIScreen.main.nativeBounds.height - min(application.statusBarFrame.height, application.statusBarFrame.width)
+            size = CGSize(width: height, height: bounds.width)
+        }
+        return size
     }
     
     func generateJavaScriptForViewPort(scale: CGFloat) -> String {
