@@ -94,10 +94,19 @@ class CourseCatelog {
             DispatchQueue.global().async {
                 if (urls.filter { $0.lastPathComponent == self.assetsFile }).count == 0 {
                     if let bundleURL = Bundle.main.url(forResource: "Assets", withExtension: "zip") {
+                        print("Bundle: \(bundleURL)")
+                        let newUrl = CourseCatelog.tempDirectory.appendingPathComponent(self.assetsFile)
+                        print("Asset placement URL: \(newUrl)")
+                        if FileManager.default.fileExists(atPath: newUrl.path) {
+                            do {
+                                try FileManager.default.removeItem(at: newUrl)
+                                print("Old Assets.zip was removed in order to place new file.")
+                            } catch {
+                                print("We were unable to delete the old Assets.zip")
+                            }
+                        }
+                        
                         do {
-                            print("Bundle: \(bundleURL)")
-                            let newUrl = CourseCatelog.tempDirectory.appendingPathComponent(self.assetsFile)
-                            print("New URL: \(newUrl)")
                             try FileManager.default.copyItem(at: bundleURL, to: newUrl)
                             urls.append(newUrl)
                         } catch {
@@ -112,11 +121,22 @@ class CourseCatelog {
                 }
                 
                 self.hasAssetsFile = true
+                if StaticMethods.doesWebDirectoryExist(self.assetsDirectory) {
+                    let dirToDelete =  CourseCatelog.tempDirectory.appendingPathComponent(self.assetsDirectory, isDirectory: true)
+                    print("Deleting old Assets directory")
+                    do {
+                        try FileManager.default.removeItem(at: dirToDelete)
+                        print("Old Assets directory removed, now able to unzip")
+                    } catch {
+                        print("Unable to remove old Assets directory, encountered error: \(error)")
+                    }
+                }
                 
                 do {
                     try Zip.unzipFile(assetsPackage, destination: CourseCatelog.tempDirectory, overwrite: true, password: nil)
+                    print("Successfully unzipped assets files")
                 } catch {
-                    print("failed to unzip assets")
+                    print("failed to unzip assets files")
                     print("error: \(error)")
                 }
                 if StaticMethods.doesWebDirectoryExist(self.assetsDirectory) {
@@ -128,7 +148,7 @@ class CourseCatelog {
             
             //Generate a new array of courses from the zip files on disk
             for url in urls {
-                print(url.path)
+//                print(url.path)
                 var goodExtension = false
                 
                 goodExtension = CourseCatelog.fileExtensions.contains(url.pathExtension)
