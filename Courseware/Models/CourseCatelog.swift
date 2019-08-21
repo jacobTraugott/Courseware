@@ -30,17 +30,13 @@ class CourseCatelog {
         return queue
     }()
     
-    private static let phraseA = "I am the very model of a modern major general"
-    private static let phraseB = "I've information vegetable, animal, and mineral"
-    private static let phraseC = "I know the kings of England, and I quote the fights historical"
-    private static let phraseD = "From Marathon to Waterloo, in order categorical"
-    private static let phraseE = "I'm very well acquainted, too, with matters mathematical"
-    private static let phraseF = "I understand equations, both the simple and quadratical"
-    private static let phraseG = "About binomial theorem I'm teeming with a lot o' news"
-    private static let phraseH = "With many cheerful facts about the square of the hypotenuse"
-    private static var phrases: [String] {
-        get {
-            return [phraseA, phraseB, phraseC, phraseD, phraseE, phraseF, phraseG, phraseH]
+    private static let phrase = "SSB1bmRlcnN0YW5kIGVxdWF0aW9ucywgYm90aCB0aGUgc2ltcGxlIGFuZCBxdWFkcmF0aWNhbA=="
+    
+    private static func getPhrase(from: String) -> String {
+        if let decodeData = Data(base64Encoded: phrase), let decodeString = String(data: decodeData, encoding: .utf8) {
+            return decodeString
+        } else {
+            return ""
         }
     }
     
@@ -148,7 +144,6 @@ class CourseCatelog {
             
             //Generate a new array of courses from the zip files on disk
             for url in urls {
-//                print(url.path)
                 var goodExtension = false
                 
                 goodExtension = CourseCatelog.fileExtensions.contains(url.pathExtension)
@@ -191,7 +186,7 @@ class CourseCatelog {
                 let oldCopy = CourseCatelog.mediaDirectory.appendingPathComponent(url.lastPathComponent).absoluteString
                 let dirForXML = CourseCatelog.removeFile(fromPath: oldCopy)
                 CourseCatelog.removeXMLFile()
-                try Zip.unzipFile(url, destination: CourseCatelog.mediaDirectory, overwrite: true, password: CourseCatelog.phrases[5])
+                try Zip.unzipFile(url, destination: CourseCatelog.mediaDirectory, overwrite: true, password: CourseCatelog.getPhrase(from: CourseCatelog.phrase))
                 shouldReturnZip = true
                 if let scan = dirForXML {
                     zipHadXMLFile = CourseCatelog.isXMLFilePresent(directory: scan)
