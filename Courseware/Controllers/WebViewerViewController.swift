@@ -49,7 +49,7 @@ class WebViewController: UIViewController, WKUIDelegate, WKNavigationDelegate, U
     }
     
     private func setupContentController() -> WKUserContentController {
-        let scale = getViewPortScale()
+        let scale = viewPortScale
         let viewPortModifyScript = generateJavaScriptForViewPort(scale: scale)
         let scriptSource = "var buttons = document.getElementsByClassName('exitBtn'); var button = buttons[0]; button.onclick = function() { window.webkit.messageHandlers.buttonPressed.postMessage({\"message\" : \"exitCourse\"}); };\(viewPortModifyScript)"
         let userContentController = WKUserContentController()
@@ -145,7 +145,7 @@ class WebViewController: UIViewController, WKUIDelegate, WKNavigationDelegate, U
         }
     }
     
-    func getViewPortScale() -> CGFloat {
+    private var viewPortScale: CGFloat {
         //This equates to a viewport of 1.0
         let standardWidth: CGFloat = 1024.0
         let standardHeight: CGFloat = 770.0
