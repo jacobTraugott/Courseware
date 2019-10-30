@@ -175,8 +175,21 @@ class CourseListViewController: UITableViewController, UISearchResultsUpdating, 
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let webVC: WebViewController = storyboard.instantiateViewController(withIdentifier: "webViewForCourse") as! WebViewController
         webVC.lessonURL = url
-        webVC.modalTransitionStyle = .flipHorizontal
-        self.present(webVC, animated: true, completion: nil)
+        //webVC.modalTransitionStyle = .flipHorizontal
+        //MARK: - Adjusted Web View Controller to seem like it opened from the App Delegate
+        //TODO: - May need to look at a better way to present the VC here; this was changed due to the way iOS 13 handles modal presentations
+        webVC.openedFromAppDelegate = true
+//        self.present(webVC, animated: true, completion: nil)
+//
+
+        guard let delegate = UIApplication.shared.delegate as? AppDelegate, let window = delegate.window else {
+            print("Unable to capture key window")
+            return
+        }
+        
+        window.rootViewController = webVC
+        window.makeKeyAndVisible()
+        self.dismiss(animated: true, completion: nil)
     }
     
     func failedToPresentCourse(_ msg: String) -> Void {
