@@ -230,7 +230,24 @@ class CourseCatelog {
                     print("During copy operation, error occurred: \(error)")
                 }
             }
-            let htmlPath = CourseCatelog.tempDirectory.appendingPathComponent("Home.html")
+            
+            let isDarkMode: Bool
+            if #available(iOS 13.0, *) {
+                isDarkMode = UITraitCollection.current.userInterfaceStyle == .dark
+            } else {
+                isDarkMode = false
+            }
+            
+            let homePage: String
+            
+            if isDarkMode {
+                homePage = "HomeDark.html"
+            } else {
+                homePage = "Home.html"
+            }
+            
+//            let htmlPath = CourseCatelog.tempDirectory.appendingPathComponent("Home.html")
+            let htmlPath = CourseCatelog.tempDirectory.appendingPathComponent(homePage)
             return htmlPath
         } else {
             return nil
