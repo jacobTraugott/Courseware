@@ -20,6 +20,8 @@ class WebViewController: UIViewController, WKUIDelegate, WKNavigationDelegate, U
     var lessonSwipeGesture: UIPanGestureRecognizer!
     
     override func viewDidLoad() {
+        self.view.isOpaque = false
+        self.view.backgroundColor = UIColor(named: "WebBackground")
         super.viewDidLoad()
         setupWebView()
         setupGestureRecognizers()
@@ -35,6 +37,8 @@ class WebViewController: UIViewController, WKUIDelegate, WKNavigationDelegate, U
         webConfig.preferences = prefs
         webConfig.userContentController = setupContentController()
         webViewer = WKWebView(frame: view.frame, configuration: webConfig)
+        webViewer.isOpaque = false
+        webViewer.backgroundColor = UIColor(named: "WebBackground")
         webViewer.contentMode = .scaleToFill
         print("Lesson: \(lessonURL.absoluteString)")
         webViewer.loadFileURL(lessonURL, allowingReadAccessTo: documentsDirectory)
@@ -119,6 +123,8 @@ class WebViewController: UIViewController, WKUIDelegate, WKNavigationDelegate, U
     }
     
     func closeWindow() {
+        //TODO: - Adjust this and remove the App Delegate reference
+        //MARK: - This is obsolete with the move to iOS 13
         if openedFromAppDelegate {
             let app = UIApplication.shared.delegate as! AppDelegate
             let window = app.window
